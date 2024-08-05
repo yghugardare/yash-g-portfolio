@@ -7,7 +7,14 @@ import SocialHero from "./SocialHero";
 import Particles from "@/components/magic-ui/particles";
 import ShineBorder from "@/components/magic-ui/shine-border";
 import { NeonGradientCard } from "@/components/magic-ui/neon-gradient-card";
+import { useState } from "react";
+import ViewResumeButton from "./Button";
+import ResumeModal from "./ResumeModal";
 function Hero() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   return (
     <section
     id="About"
@@ -73,13 +80,18 @@ function Hero() {
           }
         >
           <button
+              onClick={openModal}
             className={`bg-[#64FFDA] md:p-3 md:px-5 md:text-lg p-3 rounded-md text-bgColor font-bold text-sm font-mono`}
           >
             Check Resume
           </button>
-         
-          <button
-          onClick={()=>{alert("click")}}
+      
+         <ResumeModal isOpen={isModalOpen} onClose={closeModal} >
+         <embed type="application/pdf" src="/yash_g.pdf" className="w-full z-[10000] h-[75vh] flex items-center"/>
+         </ResumeModal>
+          <a
+          href={"/yash_g.pdf"}
+          download
             // component="a"
             // href="/"
             // download={Info.name}
@@ -96,7 +108,7 @@ function Hero() {
             Download
             <IconDownload size={20} />
             </ShineBorder>
-          </button>
+          </a>
         </div>
       </div>
       <SocialHero />

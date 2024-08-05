@@ -15,10 +15,23 @@ function Header() {
     }, 3000);
     return () => {};
   }, []);
+  const getOffset = () => {
+    if (typeof window !== 'undefined') {
+      return (-15 * window.innerHeight) / 100;
+    }
+    return 0;
+  };
+  const getOffset1 = () => {
+    if (typeof window !== 'undefined') {
+      return (-12 * window.innerHeight) / 100;
+    }
+    return 0;
+  };
+
 
   return (
     <header
-      className={`${loading && "hidden"} bg-bgColor shadow-black shadow-md text-textColor w-full  fixed top-0  z-[100] md:h-[15vh] h-[10vh] flex justify-between items-center px-5 md:px-8`}
+      className={`${loading && "hidden"} bg-bgColor shadow-black shadow-md text-textColor w-full  fixed top-0  z-50 md:h-[15vh] h-[10vh] flex justify-between items-center px-5 md:px-8`}
     >
       <div>
         <IconHexagonLetterY size={60} color="#64FFDA" stroke={1.25} />
@@ -31,7 +44,7 @@ function Header() {
             to={el}
             spy={true}
             smooth={true}
-            offset={(-15 * window.innerHeight) / 100} // Adjusting offset for the fixed header height
+            offset={getOffset()} // Adjusting offset for the fixed header height
             duration={500}
             className="cursor-pointer text-lg md:text-xl"
           >
@@ -74,7 +87,7 @@ function Header() {
               to={el}
               spy={true}
               smooth={true}
-              offset={(-12 * window.innerHeight) / 100} // Adjusting offset for the fixed header height
+              offset={getOffset1()} // Adjusting offset for the fixed header height
               duration={500}
               className="cursor-pointer text-lg mb-4 text-textColor"
               onClick={() => setOpen(false)}
