@@ -12,20 +12,20 @@ import ViewResumeButton from "./Button";
 import ResumeModal from "./ResumeModal";
 function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [iframeSrc, setIframeSrc] = useState('');
+  // const [iframeSrc, setIframeSrc] = useState('');
   const openModal = () => {
-    setIframeSrc('/yash-g.pdf');
+    // setIframeSrc('/yash-g.pdf');
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setIframeSrc('');
+    // setIframeSrc('');
     setIsModalOpen(false);
   };
-  
+
   return (
     <section
-    id="About"
+      id="About"
       className={`w-full h-full !overflow-hidden flex flex-col lg:px-12 2xl:px-15 lg:flex-row-reverse  justify-center items-center gap-y-10`}
     >
       <Particles
@@ -40,9 +40,9 @@ function Hero() {
       {/* Image */}
       <div className=" lg:grid lg:place-content-center lg:w-full lg:p-5">
         <NeonGradientCard
-        borderSize={2}
-        borderRadius={250}
-        className={" bg-transparent rounded-full "}
+          borderSize={2}
+          borderRadius={250}
+          className={" bg-transparent rounded-full "}
         >
           <Image
             width={270}
@@ -51,7 +51,7 @@ function Hero() {
             src="/yashImg.jpg"
             alt="yash"
           />
-        </NeonGradientCard> 
+        </NeonGradientCard>
       </div>
 
       {/* name,descriprion */}
@@ -88,33 +88,36 @@ function Hero() {
           }
         >
           <button
-              onClick={openModal}
+            onClick={openModal}
             className={`bg-[#64FFDA] md:p-3 md:px-5 md:text-lg p-3 rounded-md text-bgColor font-bold text-sm font-mono`}
           >
             Check Resume
           </button>
-      
-         <ResumeModal isOpen={isModalOpen} onClose={closeModal} >
-         <iframe  src={iframeSrc} className="w-full z-[10000] h-[80vh] flex justify-center items-center"></iframe>
-         </ResumeModal>
+
+          <ResumeModal isOpen={isModalOpen} onClose={closeModal}>
+            <embed
+              className="w-full z-[10000] h-[80vh] flex justify-center items-center"
+              src="https://drive.google.com/file/d/1EMEeIeezRq9m12Icm9dV27jW_c9XIelE/preview?usp=sharing"
+            />
+          </ResumeModal>
           <a
-          href={"/yash_g.pdf"}
-          download
+            href={"/yash-g.pdf"}
+            download
             // component="a"
             // href="/"
             // download={Info.name}
             className="focus-visible:!outline-non"
             // variant="outline"
           >
-             <ShineBorder
-          color={["#64FFDA","#FFBE7B","#FE8FB5","#A07CFE"]}
-          borderRadius={8}
-          borderWidth={1.75}
-          duration={8}
-          className="!bg-bgColor w-full font-mono !flex text-[#64FFDA] text-sm rounded-md font-bold !items-center md:p-3 md:text-lg md:px-5 !justify-center p-3 !gap-2"
-          >
-            Download
-            <IconDownload size={20} />
+            <ShineBorder
+              color={["#64FFDA", "#FFBE7B", "#FE8FB5", "#A07CFE"]}
+              borderRadius={8}
+              borderWidth={1.75}
+              duration={8}
+              className="!bg-bgColor w-full font-mono !flex text-[#64FFDA] text-sm rounded-md font-bold !items-center md:p-3 md:text-lg md:px-5 !justify-center p-3 !gap-2"
+            >
+              Download
+              <IconDownload size={20} />
             </ShineBorder>
           </a>
         </div>
