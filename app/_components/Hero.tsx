@@ -12,9 +12,17 @@ import ViewResumeButton from "./Button";
 import ResumeModal from "./ResumeModal";
 function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [iframeSrc, setIframeSrc] = useState('');
+  const openModal = () => {
+    setIframeSrc('/yash-g.pdf');
+    setIsModalOpen(true);
+  };
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {
+    setIframeSrc('');
+    setIsModalOpen(false);
+  };
+  
   return (
     <section
     id="About"
@@ -87,7 +95,7 @@ function Hero() {
           </button>
       
          <ResumeModal isOpen={isModalOpen} onClose={closeModal} >
-         <embed type="application/pdf" src="/yash_g.pdf" className="w-full z-[10000] h-[75vh] flex items-center"/>
+         <iframe  src={iframeSrc} className="w-full z-[10000] h-[80vh] flex justify-center items-center"></iframe>
          </ResumeModal>
           <a
           href={"/yash_g.pdf"}
