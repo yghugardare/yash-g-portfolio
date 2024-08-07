@@ -77,7 +77,7 @@ export const SkillInfo: SkillInfoType[] = [
     title: "Other",
     skills: [
       "Git",
-      "GitHub",
+      "Github",
       "Docker",
       "Postman",
       "Cloudinary",
@@ -167,8 +167,8 @@ export const top3: ProjectType[] = [
       "Clerk",
     ],
     imgPath: "/Project/AiMock",
-    gitHubLink: "",
-    liveLink: "",
+    gitHubLink: "https://github.com/yghugardare/AI-Interview-SaaS",
+    liveLink: "https://ai-interview-saas-yashdg.vercel.app/",
     features: [
       "🔐 Authentication & Authorization with Clerk",
       "🤖 Mock Interview Questions Genereated by AI using Google Gemini AI model",
@@ -197,7 +197,7 @@ export const next: ProjectType[] = [
     ],
     imgPath: "/Project/AiMock",
     gitHubLink: "https://github.com/yghugardare/AI-Interview-SaaS",
-    liveLink: "",
+    liveLink: "https://ai-interview-saas-yashdg.vercel.app/",
     features: [
       "🔐 Authentication & Authorization with Clerk",
       "🤖 Mock Interview Questions Genereated by AI using Google Gemini AI model",
