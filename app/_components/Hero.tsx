@@ -97,7 +97,7 @@ function Hero() {
           <ResumeModal isOpen={isModalOpen} onClose={closeModal}>
             <embed
               className="w-full z-[10000] md:h-[80vh] h-[55vh] flex justify-center items-center"
-              src="https://drive.google.com/file/d/1EMEeIeezRq9m12Icm9dV27jW_c9XIelE/preview?usp=sharing"
+              src="https://drive.google.com/file/d/1wNeXoihBHlTHuDKKc2RUjQI81QbIGiu0/preview?usp=sharing"
             />
           </ResumeModal>
           <a

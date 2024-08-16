@@ -142,7 +142,7 @@ export const top3: ProjectType[] = [
     ],
     imgPath: "/Project/Threads",
     gitHubLink: "https://github.com/yghugardare/Threads",
-    liveLink: "",
+    liveLink: "https://threads-bdgs.onrender.com/",
     features: [
       "🔐 Authentication & Authorization with JWT",
       "🌐 Recoil for Global State Management",
@@ -256,7 +256,7 @@ export const mern: ProjectType[] = [
     ],
     imgPath: "/Project/Threads",
     gitHubLink: "https://github.com/yghugardare/Threads",
-    liveLink: "",
+    liveLink: "https://threads-bdgs.onrender.com/",
     features: [
       "🔐 Authentication & Authorization with JWT",
       "🌐 Recoil for Global State Management",
