@@ -6,7 +6,9 @@ yashghugardarework@gmail.com
 Pune, India
 https://www.linkedin.com/in/yghugar/
 https://yash-g-portfolio.vercel.app/
-
+https://github.com/yghugardare/
+https://yash-ghugardare-blogs.hashnode.dev/
+https://x.com/yghugardare15
 
 SUMMARY
 
