@@ -24,7 +24,7 @@ Apr 2025 – Present
 
 Course Marketing Platform — Next.js 16, Sanity CMS
 
-• Led a team to migrate CA Monk’s established course marketing platform, serving ~300K monthly visits and supporting ₹X Cr+ (US$XXXK+) in cumulative platform revenue, from Graphy to Next.js 16 and Sanity CMS, eliminating dependency on the third-party landing-page platform.
+• Led a team to migrate CA Monk’s established course marketing platform, serving ~300K monthly visits and supporting ₹6.8 Cr+ (US$710K+) in cumulative platform revenue, from Graphy to Next.js 16 and Sanity CMS, eliminating dependency on the third-party landing-page platform.
 
 • Architected a high-efficiency caching and event-driven revalidation layer using Next.js Cache Components/PPR, Sanity webhooks, and Upstash Redis, reducing Sanity API requests by 95%+ while maintaining sub-second response times.
 

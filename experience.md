@@ -4,7 +4,7 @@ Note - use Resume as primary source of truth for work experience details. This f
 Work experience- 
 
 Company - CA MONK
-ROLE -Full stack developer
+ROLE - Full stack developer
 Date - Apr 2025 - Present
 type - remote
 
