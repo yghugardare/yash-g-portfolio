@@ -504,6 +504,11 @@
     }
   }
 }
+
+@keyframes caret-blink {
+  50% { opacity: 0; }
+}
+
 /* Scroll reveal. Elements start hidden only when JS runs (html.js), so no-JS visitors see everything. */
 @layer components {
   html.js [data-reveal] {
