@@ -99,6 +99,9 @@
     text-wrap: pretty;
   }
 }
+.source-sans-font{
+  font-family: var(--font-source-serif),var(--font-display);
+}
 
 @utility container-x {
   margin-inline: auto;
@@ -474,7 +477,7 @@
   .strike-old {
     position: relative;
     font-family: var(--font-source-serif), var(--font-display);
-    color: var(--color-ink-3);
+    color: var(--color-ink-2);
     transition: color 500ms ease-in-out;
   }
 

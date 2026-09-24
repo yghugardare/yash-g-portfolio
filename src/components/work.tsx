@@ -10,7 +10,7 @@ export function Work() {
       label="Work"
       title={
         <>
-          Two years at CA Monk, from intern to{" "}
+          Two years at CA Monk, <span className="source-sans-font">from</span> intern to{" "}
           <em className="text-brass-deep italic">
             leading the web and mobile platform
           </em>

@@ -104,85 +104,85 @@ export const projects: Project[] = [
     },
   },
   // Dummy project for reviewing the multi-project UI. Remove before publishing.
-  {
-    slug: "realtime-whiteboard",
-    name: "Realtime Whiteboard",
-    tagline:
-      "A shared canvas where a small team can sketch, add sticky notes and see each other's cursors live.",
-    kind: "Side project",
-    highlights: [
-      "Syncs drawing and cursor movement between users over **WebSockets**, with ==under 100ms of lag== on a normal connection.",
-      "Stores each board as a list of operations in **PostgreSQL**, so the full history can be replayed or undone.",
-      "Supports sticky notes, shapes and freehand drawing, with export to PNG.",
-    ],
-    stack: ["React", "TypeScript", "Node.js", "WebSockets", "PostgreSQL"],
-    image: {
-      src: "/Project/placeholder-1.svg",
-      alt: "Placeholder image for the Realtime Whiteboard project.",
-      width: 1280,
-      height: 720,
-    },
-    links: { github: "https://github.com/yghugardare/" },
-    details: {
-      summary: "Placeholder project used to review the multi-project layout.",
-      context:
-        "Placeholder content. A shared whiteboard built with **React** and **WebSockets** for small teams.",
-      sections: [
-        {
-          heading: "How it works",
-          paragraphs: [
-            "Placeholder content. Every change on the canvas is sent as a small operation over a **WebSocket** connection and applied by other clients in order.",
-          ],
-        },
-        {
-          heading: "Storage",
-          paragraphs: [
-            "Placeholder content. Boards are saved as an operation log in **PostgreSQL**, which makes undo and history replay straightforward.",
-          ],
-        },
-      ],
-    },
-  },
+  // {
+  //   slug: "realtime-whiteboard",
+  //   name: "Realtime Whiteboard",
+  //   tagline:
+  //     "A shared canvas where a small team can sketch, add sticky notes and see each other's cursors live.",
+  //   kind: "Side project",
+  //   highlights: [
+  //     "Syncs drawing and cursor movement between users over **WebSockets**, with ==under 100ms of lag== on a normal connection.",
+  //     "Stores each board as a list of operations in **PostgreSQL**, so the full history can be replayed or undone.",
+  //     "Supports sticky notes, shapes and freehand drawing, with export to PNG.",
+  //   ],
+  //   stack: ["React", "TypeScript", "Node.js", "WebSockets", "PostgreSQL"],
+  //   image: {
+  //     src: "/Project/placeholder-1.svg",
+  //     alt: "Placeholder image for the Realtime Whiteboard project.",
+  //     width: 1280,
+  //     height: 720,
+  //   },
+  //   links: { github: "https://github.com/yghugardare/" },
+  //   details: {
+  //     summary: "Placeholder project used to review the multi-project layout.",
+  //     context:
+  //       "Placeholder content. A shared whiteboard built with **React** and **WebSockets** for small teams.",
+  //     sections: [
+  //       {
+  //         heading: "How it works",
+  //         paragraphs: [
+  //           "Placeholder content. Every change on the canvas is sent as a small operation over a **WebSocket** connection and applied by other clients in order.",
+  //         ],
+  //       },
+  //       {
+  //         heading: "Storage",
+  //         paragraphs: [
+  //           "Placeholder content. Boards are saved as an operation log in **PostgreSQL**, which makes undo and history replay straightforward.",
+  //         ],
+  //       },
+  //     ],
+  //   },
+  // },
   // Dummy project for reviewing the multi-project UI. Remove before publishing.
-  {
-    slug: "job-tracker-api",
-    name: "Job Application Tracker",
-    tagline:
-      "A small app and API for tracking job applications, interview stages and follow-up reminders.",
-    kind: "Side project",
-    highlights: [
-      "REST API built with **NestJS** and **Prisma**, with typed request validation using **Zod**.",
-      "Sends ==follow-up reminders by email== when an application has had no update for a week.",
-      "Kanban-style board on the frontend for moving applications between stages.",
-    ],
-    stack: ["Next.js", "NestJS", "Prisma", "PostgreSQL", "Zod"],
-    image: {
-      src: "/Project/placeholder-2.svg",
-      alt: "Placeholder image for the Job Application Tracker project.",
-      width: 1280,
-      height: 720,
-    },
-    links: { github: "https://github.com/yghugardare/" },
-    details: {
-      summary: "Placeholder project used to review the multi-project layout.",
-      context:
-        "Placeholder content. A job application tracker with a **NestJS** API and a **Next.js** frontend.",
-      sections: [
-        {
-          heading: "API",
-          paragraphs: [
-            "Placeholder content. The API is built with **NestJS** and **Prisma** on PostgreSQL, with request bodies validated by **Zod** schemas.",
-          ],
-        },
-        {
-          heading: "Reminders",
-          paragraphs: [
-            "Placeholder content. A scheduled job checks for applications with no activity for seven days and sends a reminder email.",
-          ],
-        },
-      ],
-    },
-  },
+  // {
+  //   slug: "job-tracker-api",
+  //   name: "Job Application Tracker",
+  //   tagline:
+  //     "A small app and API for tracking job applications, interview stages and follow-up reminders.",
+  //   kind: "Side project",
+  //   highlights: [
+  //     "REST API built with **NestJS** and **Prisma**, with typed request validation using **Zod**.",
+  //     "Sends ==follow-up reminders by email== when an application has had no update for a week.",
+  //     "Kanban-style board on the frontend for moving applications between stages.",
+  //   ],
+  //   stack: ["Next.js", "NestJS", "Prisma", "PostgreSQL", "Zod"],
+  //   image: {
+  //     src: "/Project/placeholder-2.svg",
+  //     alt: "Placeholder image for the Job Application Tracker project.",
+  //     width: 1280,
+  //     height: 720,
+  //   },
+  //   links: { github: "https://github.com/yghugardare/" },
+  //   details: {
+  //     summary: "Placeholder project used to review the multi-project layout.",
+  //     context:
+  //       "Placeholder content. A job application tracker with a **NestJS** API and a **Next.js** frontend.",
+  //     sections: [
+  //       {
+  //         heading: "API",
+  //         paragraphs: [
+  //           "Placeholder content. The API is built with **NestJS** and **Prisma** on PostgreSQL, with request bodies validated by **Zod** schemas.",
+  //         ],
+  //       },
+  //       {
+  //         heading: "Reminders",
+  //         paragraphs: [
+  //           "Placeholder content. A scheduled job checks for applications with no activity for seven days and sends a reminder email.",
+  //         ],
+  //       },
+  //     ],
+  //   },
+  // },
 ];
 
 export function getProject(slug: string): Project | undefined {

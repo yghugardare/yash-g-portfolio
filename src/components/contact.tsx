@@ -11,7 +11,7 @@ export function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="scroll-mt-20 border-t border-line py-16 sm:py-20 lg:py-28"
+      className="scroll-mt-20 border-t border-line py-16 sm:py-20"
     >
       <div className="container-x grid grid-cols-1 gap-14 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div className="lg:col-span-6">
@@ -27,7 +27,7 @@ export function Contact() {
             className="mt-5 text-[2.2rem] leading-[1.04] font-normal sm:text-[3rem] lg:text-[3.4rem]"
             data-reveal
           >
-            If you&apos;re building something real,{" "}
+            <span className="source-sans-font">If</span> you&apos;re building something real,{" "}
             <em className="text-brass-deep italic">
               I&apos;d like to hear about it
             </em>
@@ -49,13 +49,13 @@ export function Contact() {
           </div>
 
           <div className="mt-8 flex flex-col gap-5 sm:mt-10" data-reveal>
-            <a
+            {/* <a
               href={`mailto:${profile.email}`}
               className="group inline-flex w-fit max-w-full items-center gap-3 font-display text-[1.2rem] text-ink transition-colors hover:text-brass-deep sm:text-[1.6rem]"
             >
               <span className="link-rule break-all">{profile.email}</span>
               <Arrow className="h-4 w-4 shrink-0 transition-transform duration-300 ease-out-soft group-hover:translate-x-1 motion-reduce:transform-none sm:h-5 sm:w-5" />
-            </a>
+            </a> */}
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
               <ResumeButton className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-ink transition-colors hover:text-brass-deep">
                 Résumé
