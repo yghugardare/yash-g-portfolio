@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 
 type SectionProps = {
   id: string;
-  number: string;
   label: string;
   title: ReactNode;
   deck?: ReactNode;
@@ -12,7 +11,6 @@ type SectionProps = {
 
 export function Section({
   id,
-  number,
   label,
   title,
   deck,
@@ -28,11 +26,8 @@ export function Section({
       <div className="container-x">
         <header className="mb-10 grid gap-5 sm:mb-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-3" data-reveal>
-            <p className="eyebrow">
-              <span className="text-brass">{number}</span>
-              <span aria-hidden="true" className="mx-2 text-line-strong">
-                /
-              </span>
+            <p className="flex items-center gap-3 text-sm font-medium text-ink-3 lg:mt-3">
+              <span aria-hidden="true" className="h-px w-6 bg-brass" />
               {label}
             </p>
           </div>

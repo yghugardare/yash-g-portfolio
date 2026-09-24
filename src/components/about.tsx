@@ -5,7 +5,6 @@ export function About() {
   return (
     <Section
       id="about"
-      number="04"
       label="About"
       title={
         <>

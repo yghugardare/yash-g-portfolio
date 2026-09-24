@@ -9,7 +9,6 @@ export function Projects() {
   return (
     <Section
       id="projects"
-      number="02"
       label="Projects"
       title={
         <>

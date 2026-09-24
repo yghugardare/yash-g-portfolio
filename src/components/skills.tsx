@@ -6,7 +6,6 @@ export function Skills() {
   return (
     <Section
       id="skills"
-      number="03"
       label="Skills"
       title={
         <>

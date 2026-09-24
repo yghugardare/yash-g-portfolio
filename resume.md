@@ -28,7 +28,7 @@ Course Marketing Platform — Next.js 16, Sanity CMS
 
 • Architected a high-efficiency caching and event-driven revalidation layer using Next.js Cache Components/PPR, Sanity webhooks, and Upstash Redis, reducing Sanity API requests by 95%+ while maintaining sub-second response times.
 
-• Optimized high-traffic landing pages to 85+ PageSpeed performance and 95+ SEO scores, implementing SEO and Generative Engine Optimization (GEO) through JSON-LD structured data, dynamic metadata, sitemaps, and crawlability improvements; integrated Sentry for production observability.
+• Optimized high-traffic landing pages to 85+ PageSpeed performance and 95+ SEO scores, implementing SEO,  Generative Engine Optimization (GEO) and Answer Engine Optimization (AEO) through JSON-LD structured data, dynamic metadata, sitemaps, robots.txt, sitemap.ts, llms.txt and crawlability improvements; integrated Sentry for production observability.
 
 
 Mobile App — Capacitor, React, TypeScript

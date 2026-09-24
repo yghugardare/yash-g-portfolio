@@ -79,3 +79,26 @@ export function Chip({ children }: { children: ReactNode }) {
     </li>
   );
 }
+
+/** Renders `**emphasis**` and `==highlight==` markers from data strings. */
+export function RichText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(\*\*.+?\*\*|==.+?==)/g).map((part, i) => {
+        if (part.startsWith("**"))
+          return (
+            <strong key={i} className="font-medium text-ink">
+              {part.slice(2, -2)}
+            </strong>
+          );
+        if (part.startsWith("=="))
+          return (
+            <mark key={i} className="highlight">
+              {part.slice(2, -2)}
+            </mark>
+          );
+        return part;
+      })}
+    </>
+  );
+}

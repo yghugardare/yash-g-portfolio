@@ -3,10 +3,28 @@ export type Metric = {
   label: string;
 };
 
+export type DiagramNode = {
+  title: string;
+  meta?: string;
+  detail: string;
+};
+
+export type DiagramStep = {
+  /** Text on the arrow leading into this step. */
+  label?: string;
+  nodes: DiagramNode[];
+};
+
+export type Diagram = {
+  title: string;
+  steps: DiagramStep[];
+};
+
 export type CaseStudySection = {
   heading: string;
   paragraphs: string[];
   bullets?: string[];
+  diagram?: Diagram;
 };
 
 export type Engagement = {
@@ -43,8 +61,8 @@ const courseMarketingPlatform: Engagement = {
   slug: "course-marketing-platform",
   name: "Course Marketing Platform",
   tagline:
-    "Migrating a revenue-critical course platform off a third-party vendor onto Next.js 16 and Sanity CMS — without dropping traffic or performance.",
-  role: "Technical lead for migration and architecture",
+    "Moved our course sales site off Graphy and onto Next.js 16 and Sanity, without losing traffic or speed.",
+  role: "Tech lead, migration and architecture",
   period: "2025 – present",
   stack: [
     "Next.js 16",
@@ -55,46 +73,111 @@ const courseMarketingPlatform: Engagement = {
     "Sentry",
   ],
   metrics: [
-    { value: "~300K", label: "monthly visits served" },
-    { value: "400+", label: "course landing pages" },
-    { value: "95%+", label: "fewer Sanity API requests" },
-    { value: "85+ / 95+", label: "PageSpeed performance / SEO" },
+    { value: "~300K", label: "visits a month" },
+    { value: "₹6.8 Cr+", label: "platform revenue since Jan 2025 (US$710K+)" },
+    { value: "95%+", label: "fewer Sanity API calls" },
   ],
   highlights: [
-    "Led the migration of CA Monk's established course marketing platform — the surface behind its course sales — from Graphy to Next.js 16 and Sanity CMS, eliminating the third-party landing-page dependency and its commissions.",
-    "Architected a caching and event-driven revalidation layer using Next.js Cache Components/PPR, Sanity webhooks, and Upstash Redis, cutting Sanity API requests by 95%+ while keeping sub-second response times.",
-    "Optimized high-traffic landing pages to 85+ PageSpeed performance and 95+ SEO scores with JSON-LD structured data, dynamic metadata, sitemaps, and crawlability improvements; integrated Sentry for production observability.",
+    "Led the team that moved the site from Graphy to **Next.js 16** and **Sanity**. This site is where people find and buy our courses, so it had to keep working the whole way through. We also stopped paying Graphy's commissions.",
+    "Built the caching layer with **Cache Components**, **Sanity webhooks** and **Upstash Redis**. Pages only refresh when content actually changes, which ==cut Sanity API calls by 95%+==.",
+    "Got the busiest pages to ==85+ on PageSpeed and 95+ on SEO==, and added **GEO and AEO** support so our courses can show up in AI answers too, using JSON-LD, dynamic metadata, sitemaps, robots.txt and llms.txt. Also set up **Sentry** for error tracking.",
   ],
   caseStudy: {
     summary:
-      "400+ course landing pages and 350+ blog pages, ~300K monthly views, and the company's course checkout — moved from a vendor platform to an architecture we fully own.",
+      "Moved 400+ course pages, 350+ blog posts and the course checkout from Graphy to a Next.js 16 and Sanity setup we own, while the site kept serving ~300K visits a month.",
     context:
-      "CA Monk's course marketing pages lived on Graphy, a third-party platform. It worked, but it cost commissions, limited what we could do with performance and SEO, and kept a revenue-critical surface outside our control. The platform had already proven its scale and business impact before the migration; the job was to replace the foundation underneath it without disrupting either.",
+      "Our course marketing pages lived on Graphy. It worked, but we paid commissions on sales, had little control over performance or SEO, and the site that sells our courses sat on someone else's platform. The platform was already doing well, with ==₹6.8 Cr+ in revenue since January 2025==, so the goal wasn't to reinvent it. The goal was to replace what it runs on **without hurting sales or search rankings**.",
     sections: [
       {
         heading: "What we built",
         paragraphs: [
-          "A Next.js 16 application backed by Sanity CMS. Admins create and manage course content in Sanity Studio; the site renders 400+ course landing pages and 350+ blog pages through a fast, SEO-optimized UI that handles course discovery and purchase. I led the migration and owned the overall platform architecture.",
+          "A **Next.js 16** app with **Sanity** as the CMS. The content team manages courses and blog posts in Sanity Studio, and the site renders ==400+ course pages and 350+ blog posts== that handle discovery and checkout. **I led the migration and owned the architecture.** The cart runs on the client with Zustand.",
         ],
       },
       {
-        heading: "The caching problem",
+        heading: "Caching and revalidation",
         paragraphs: [
-          "High-traffic pages fed by a headless CMS have an obvious failure mode: every request that misses cache hits the CMS API, and free-tier rate limits or third-party costs become a production risk. The naïve alternative — long TTLs — means editors publish a change and wait.",
-          "I designed the data-fetching layer around Partial Prerendering and Next.js Cache Components, so the static shell of each page is served from the edge and only genuinely dynamic slots are streamed. Revalidation is event-driven rather than time-based: Sanity webhooks fire on publish, and an Upstash Redis sorted set debounces rapid Studio publishes inside a 120-second window. A scheduled cron then executes targeted, tag-based cache revalidation for exactly the content that changed.",
-          "The result was a 95%+ reduction in Sanity API requests, sub-second edge response times, and a platform that stays inside its API budget regardless of how often editors publish.",
+          "The risk with a headless CMS behind high-traffic pages is that **every cache miss turns into a Sanity API call**. With enough traffic you run into rate limits or a bigger bill. Long cache TTLs avoid that, but then an editor publishes a fix and it doesn't show up for a while.",
+          "I built the pages on **Partial Prerendering** and **Cache Components**. The static shell of each page is served from cache and only the parts that actually change are streamed in. **Revalidation is driven by publishing instead of a timer.** A Sanity webhook hits our route on publish, and the route adds the affected cache tags to an **Upstash Redis** sorted set. Editors often publish several times in a row, so tags wait in a 120-second window. A scheduled cron picks up tags that have settled and calls revalidateTag for just those.",
+          "==Sanity API requests dropped by 95%+==, responses stay under a second, and it doesn't matter how often the content team hits publish.",
         ],
+        diagram: {
+          title: "How a publish reaches the site",
+          steps: [
+            {
+              nodes: [
+                {
+                  title: "Editor publishes",
+                  meta: "Sanity Studio",
+                  detail:
+                    "Someone on the content team edits a course or blog post and hits publish. Nothing on the site changes yet.",
+                },
+              ],
+            },
+            {
+              label: "webhook",
+              nodes: [
+                {
+                  title: "Webhook route",
+                  meta: "Next.js route handler",
+                  detail:
+                    "Sanity calls our route with the document that changed. The route works out which cache tags that document affects.",
+                },
+              ],
+            },
+            {
+              label: "queue the tags",
+              nodes: [
+                {
+                  title: "Redis sorted set",
+                  meta: "Upstash, 120s window",
+                  detail:
+                    "Each tag is stored with a timestamp as its score. Publishing the same thing again just updates the timestamp, so a burst of publishes turns into one entry.",
+                },
+              ],
+            },
+            {
+              label: "scheduled cron",
+              nodes: [
+                {
+                  title: "Revalidate settled tags",
+                  meta: "revalidateTag",
+                  detail:
+                    "The cron takes tags that haven't changed for 120 seconds, calls revalidateTag for each one and removes them from the set.",
+                },
+              ],
+            },
+            {
+              label: "next request",
+              nodes: [
+                {
+                  title: "Cached page",
+                  meta: "PPR + Cache Components",
+                  detail:
+                    "The affected pages are rebuilt once with fresh content and served from cache again. Visitors never wait on Sanity directly.",
+                },
+                {
+                  title: "Sanity API",
+                  meta: "only called on rebuild",
+                  detail:
+                    "Sanity is only queried when a tagged page is rebuilt, not on every visit. That's where the 95%+ drop in API requests comes from.",
+                },
+              ],
+            },
+          ],
+        },
       },
       {
-        heading: "Performance, SEO, and observability",
+        heading: "Performance, SEO and AI search",
         paragraphs: [
-          "The pages needed to rank and convert, so I treated performance as a product requirement. The platform scores 85+ on PageSpeed across LCP, INP, and TTFB, and 95+ on SEO — with JSON-LD structured data, dynamic metadata, sitemaps, and crawlability work aimed at both search and generative engines.",
-          "I added Sentry for error tracking and logging so production issues surface with context, and implemented the client-side cart with Zustand.",
+          "These pages need to rank and convert, so speed was part of the spec from the start. The busiest pages score ==85+ on PageSpeed performance==, looking at LCP, INP and TTFB, and ==95+ on SEO==.",
+          "We also wanted our courses to show up in AI answers, not only in Google results. So alongside regular SEO I added support for **GEO and AEO** (generative and answer engine optimization): **JSON-LD structured data** on course and blog pages, dynamic metadata for every page, sitemaps generated with sitemap.ts, a proper robots.txt, and an **llms.txt** that gives AI crawlers a clean overview of the site.",
+          "I set up **Sentry** for error tracking and logging, so when something breaks in production we get the stack trace and context instead of a vague report.",
         ],
       },
     ],
     collaboration:
-      "I served as technical lead for the migration and architecture, and worked alongside two other engineers on course cart flows, Sanity block distribution, reusable UI variants, presentation mode, and SEO handling.",
+      "I was the **technical lead for the migration and the architecture**. Other engineers on the team worked with me on the course cart flows, distributing Sanity content blocks, reusable UI variants, presentation mode and SEO handling.",
   },
 };
 
@@ -102,7 +185,7 @@ const mobileApp: Engagement = {
   slug: "mobile-app",
   name: "CA Monk Mobile App",
   tagline:
-    "Shipping CA Monk's first Android and iOS app from scratch by turning an existing React monorepo into a native product — not rewriting it.",
+    "Built our first Android and iOS app by wrapping the existing React code with Capacitor instead of rewriting it.",
   role: "Led development and launch",
   period: "2025 – present",
   stack: [
@@ -114,48 +197,125 @@ const mobileApp: Engagement = {
     "Google Play",
   ],
   metrics: [
-    { value: "90%+", label: "code reuse from web" },
-    { value: "Day 1", label: "feature parity with web tools" },
-    { value: "2", label: "Android build flavors from one codebase" },
-    { value: "Live", label: "on Google Play Store" },
+    { value: "90%+", label: "of the code reused from web" },
+    { value: "1", label: "codebase for Android and iOS" },
+    { value: "Live", label: "on Google Play" },
   ],
   highlights: [
-    "Led development and launch of CA Monk's cross-platform Android/iOS application from scratch using Capacitor, React, and TypeScript, achieving 90%+ code reuse from the existing web ecosystem while maintaining feature parity across career tools.",
-    "Built native integrations for file upload/download, camera and microphone access, app lifecycle handling, and deep-link payment reconciliation.",
-    "Automated multi-flavor Android builds for internal testing and production distribution on the Google Play Store.",
+    "Picked **Capacitor** so the tools we already had on web could run on phones. That gave us ==90%+ code reuse== and every tool on day one.",
+    "Built the native parts a webview can't handle on its own: **file upload and download**, **camera and mic** for interview tests, and **deep-link payments** that still reconcile if the user closes the browser halfway.",
+    "Automated two Android builds from one codebase, one for internal testing and one for customers, and shipped the app ==live on Google Play==.",
   ],
   caseStudy: {
     summary:
-      "One codebase, two platforms, every existing tool available on day one — with the native auth, file, payment, and hardware work that a webview can't do on its own.",
+      "One codebase for Android and iOS, with every existing web tool available from the first release, plus the native auth, file, payment and hardware work a webview can't do on its own.",
     context:
-      "CA Monk's web platform already had a large ecosystem of complex, battle-tested tools — the AI Resume Builder, ATS Resume Scorer, AI Interview Bot, Versant tests, technical and aptitude exams, mentorship booking — built as modular React packages in a monorepo. The question was how to get all of that onto phones without a six-month detour into Kotlin, Swift, or a React Native rewrite.",
+      "Our web platform already had a lot of mature tools: the AI Resume Builder, ATS Resume Scorer, AI Interview Bot, Versant tests, technical and aptitude exams, and mentorship booking. They live as modular React packages in a monorepo. The question was how to get all of that onto phones **without spending six months rewriting it** in Kotlin, Swift or React Native.",
     sections: [
       {
         heading: "Why Capacitor",
         paragraphs: [
-          "I chose Capacitor for speed and code reuse. It let me package the existing web code into a bundled native shell, which gave us over 90% code reuse and immediate feature parity on day one. The trade-off is that a webview doesn't magically handle auth, files, payments, or hardware the way a native app does — so that's where the real engineering went.",
+          "I picked **Capacitor** for speed and code reuse. It bundles the existing web code into a native shell, which gave us ==90%+ code reuse and every tool on day one==. The catch is that a webview doesn't handle auth, files, payments or hardware the way a native app does, so that's where most of the engineering went.",
+        ],
+        diagram: {
+          title: "How the app is put together",
+          steps: [
+            {
+              nodes: [
+                {
+                  title: "Web tools",
+                  meta: "React packages from the monorepo",
+                  detail:
+                    "Resume Builder, ATS Scorer, AI Interview Bot, Versant and aptitude tests, mentorship booking. These are the same packages the web app uses. Nothing was rewritten for mobile.",
+                },
+              ],
+            },
+            {
+              label: "bundled into",
+              nodes: [
+                {
+                  title: "App shell",
+                  meta: "React + TypeScript",
+                  detail:
+                    "Routing, layout and the mobile auth layer. The Axios adapter with the refresh mutex lives here, so parallel 401s trigger one token refresh instead of logging the user out.",
+                },
+              ],
+            },
+            {
+              label: "native calls through Capacitor plugins",
+              nodes: [
+                {
+                  title: "Secure storage",
+                  meta: "Keychain / Keystore",
+                  detail:
+                    "30-day refresh tokens are kept in the iOS Keychain and Android Keystore instead of cookies, which aren't reliable inside a webview.",
+                },
+                {
+                  title: "Files",
+                  meta: "File Picker + Filesystem",
+                  detail:
+                    "Users pick resume PDFs from their device. Exported resumes are saved to Documents with a notification that opens the PDF in the native viewer.",
+                },
+                {
+                  title: "Payments",
+                  meta: "Browser sheet + deep link",
+                  detail:
+                    "Checkout opens in an in-app browser sheet. The gateway comes back through a camonk:// deep link, and the app confirms the transaction with our backend even if the user closed the sheet or lost network.",
+                },
+                {
+                  title: "Camera and mic",
+                  meta: "Interview Bot, Versant",
+                  detail:
+                    "Streams camera and mic for interview practice and tests, saves progress when the app goes to the background, and blocks the Android back button on test screens.",
+                },
+              ],
+            },
+            {
+              label: "built and shipped as",
+              nodes: [
+                {
+                  title: "CA Monk Labs",
+                  meta: "internal Android build",
+                  detail:
+                    "The internal testing flavor, built from the same codebase as the customer app.",
+                },
+                {
+                  title: "CA Monk",
+                  meta: "live on Google Play",
+                  detail:
+                    "The customer build. The same build scripts produce both Android flavors and generate 15+ adaptive launcher icons.",
+                },
+                {
+                  title: "iOS",
+                  meta: "same bundle",
+                  detail:
+                    "The iOS project uses the same web bundle and the same plugins.",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        heading: "Auth and sign-in",
+        paragraphs: [
+          "Cookies and redirects are unreliable inside a mobile webview, so web auth didn't carry over. I built in-app auth that stores 30-day refresh tokens in the **iOS Keychain and Android Keystore** through a secure storage plugin. On top of that, an **Axios adapter holds a refresh mutex**. If several requests get a 401 at the same time, ==only one refresh call goes out== and the others wait for the new token, instead of each one trying to refresh and logging the user out.",
+          "For sign-up I added native **Google Sign-In** through Credential Manager and automatic SMS OTP reading on Android, so users don't have to type codes.",
         ],
       },
       {
-        heading: "Auth and security",
+        heading: "Files, payments and hardware",
         paragraphs: [
-          "Web cookies and redirects break inside mobile webviews. I engineered an in-app auth system that stores 30-day refresh tokens in the native OS Keychain (iOS) and Keystore (Android) via secure storage, and an Axios adapter with an in-flight refresh mutex so parallel requests hitting 401 trigger a single silent refresh instead of logging the user out.",
-          "For onboarding, I integrated native Google Sign-In through Credential Manager and automatic SMS OTP retrieval on Android, so users never type a code by hand.",
-        ],
-      },
-      {
-        heading: "Files, payments, and hardware",
-        paragraphs: [
-          "Users pick resume PDFs from device storage through the Capacitor File Picker, and exported resumes are saved directly to the Documents folder with a notification that opens the PDF in the native reader.",
-          "The in-app checkout for coin top-ups and mentor bookings opens payment gateways in an in-app browser sheet, captures custom deep-link callbacks, and reconciles transaction status with the backend even if the user closes the browser or loses network mid-payment.",
-          "For the AI Interview Bot and Versant tests I enabled camera and microphone streaming, handled app lifecycle states to save progress, and isolated test screens — hiding navigation and intercepting the Android back button — so users don't accidentally exit and lose a coin-funded attempt.",
+          "Users pick resume PDFs from device storage with the **Capacitor File Picker**. Exported resumes are saved straight to the Documents folder, with a notification that opens the PDF in the phone's viewer.",
+          "Payments took the most care. Checkout for coin top-ups and mentor bookings opens the gateway in an in-app browser sheet. When payment finishes, the gateway redirects to a **camonk://payment-return deep link** that the app catches. People close sheets early and lose network halfway through, so ==the app reconciles the transaction status with our backend== instead of relying on the redirect alone.",
+          "The AI Interview Bot and Versant tests need the **camera and mic**. I handled app lifecycle events so progress is saved when the app goes to the background, and **locked down test screens** by hiding navigation and intercepting the Android back button. Tests cost coins, so accidentally leaving one is a real loss for the user.",
         ],
       },
       {
         heading: "Builds and release",
         paragraphs: [
-          "I wrote automation to maintain two Android flavors from one codebase — CA Monk Labs for internal testing and CA Monk for customers — generated 15+ adaptive launcher icons automatically, and shipped the production release to the Google Play Store.",
-          "Current work is bringing the native LMS into the app so students can stream video courses, track lesson progress, and take quizzes on mobile, removing the last dependency on third-party learning platforms.",
+          "I wrote scripts that build **two Android flavors from one codebase**: CA Monk Labs for internal testing and CA Monk for customers. The same scripts generate 15+ adaptive launcher icons. The customer build is ==live on Google Play==.",
+          "Right now I'm bringing our **LMS into the app** so students can stream courses, track progress and take quizzes on mobile. Once that ships, we won't need Graphy for learning either.",
         ],
       },
     ],
@@ -166,7 +326,7 @@ const aiResumeSuite: Engagement = {
   slug: "ai-resume-builder",
   name: "AI Resume Builder & ATS Scorer",
   tagline:
-    "Full-stack work on CA Monk's most-used tool: a resume builder, ATS scorer, and cover-letter suite with a resilient document pipeline and deterministic AI scoring.",
+    "Full-stack work on the most-used tool on the platform: a resume builder, ATS scorer and cover letter writer.",
   role: "Full-stack engineer",
   period: "2025 – present",
   stack: [
@@ -180,52 +340,181 @@ const aiResumeSuite: Engagement = {
     "Docling / OCR",
   ],
   metrics: [
-    { value: "100K+", label: "candidates served" },
-    { value: "3-tier", label: "ingestion fallback chain" },
-    { value: "<50ms", label: "local PDF text extraction" },
-    { value: "temp 0", label: "deterministic parsing config" },
+    { value: "100K+", label: "candidates have used it" },
+    { value: "<50ms", label: "text extraction for digital PDFs" },
   ],
   highlights: [
-    "Built full-stack features for an AI Resume Builder, ATS Resume Scorer, and Cover Letter suite using React, Redux Toolkit, TanStack Query, Node.js/Express, PostgreSQL/Prisma, Puppeteer, and the Vercel AI SDK.",
-    "Engineered a multi-stage PDF/DOC/DOCX ingestion pipeline with fast local text extraction, Docling/OCR fallbacks, heuristic quality validation, and AI-based parsing into structured resume sections using OpenAI/Azure OpenAI models.",
-    "Implemented prompt-injection safeguards, strict JSON-schema validation, and fallback logic to improve AI output reliability; developed a Puppeteer-based one-page resume rendering mode for ATS-friendly PDF exports.",
+    "Worked across the **React** frontend and **Node.js/Express** backend, mostly on saving resumes, AI summaries and PDF downloads.",
+    "Worked with the backend team on the upload pipeline for PDF, DOC and DOCX. It tries ==fast local extraction first==, falls back to **Docling** and OCR for harder files, then parses the text into resume sections with **OpenAI** models.",
+    "Added prompt-injection guards and strict **Zod** schemas so the AI output stays reliable. I also built ==One-Page Mode== after noticing users kept complaining that their downloads spilled onto a second page.",
   ],
   caseStudy: {
     summary:
-      "The most heavily used tool on the platform, serving over 100,000 candidates and driving coin-based monetization — built to accept messy real-world resumes and return scores that are fair and reproducible.",
+      "The most-used tool on the platform, used by 100K+ candidates. Most of the work was making it handle messy real-world resumes and give the same score for the same resume every time.",
     context:
-      "Resume tooling looks simple until real users upload real files: scanned PDFs, exported DOCX, three-page resumes that need to become one page. I worked across the React frontend and Node.js/Express backend, owning the builder's save, summary-generation, and PDF download paths, and collaborating with the core backend team on the AI pipeline.",
+      "Resume tools look simple until people upload real files: scanned PDFs, exported DOCX files, three-page resumes that need to fit on one. I worked across the **React** frontend and the **Node.js/Express** backend. **I owned saving resumes, AI summary generation and PDF downloads**, and worked with the core backend team on the AI pipeline.",
     sections: [
       {
         heading: "One-Page Mode",
         paragraphs: [
-          "While investigating customer issues I noticed a recurring complaint: downloaded resumes spilled onto a second page, breaking the concise, ATS-friendly format users wanted. I dug into the PDF rendering and layout behaviour to understand why content overflowed, then designed a One-Page Mode that renders the resume onto a single page while preserving its structure. It's a Puppeteer-based export path, and state for it — along with configuration and theming — is managed through Redux and TanStack Query on the frontend.",
+          "While going through customer issues I kept seeing the same complaint: downloaded resumes spilled onto a second page. I dug into how our PDF rendering and layout worked to see why content overflowed, then built ==One-Page Mode==, which fits the resume onto a single page and keeps its structure intact. The export runs through **Puppeteer**. On the frontend, the mode, template config and theming are managed with **Redux Toolkit** and **TanStack Query**.",
         ],
       },
       {
-        heading: "Document ingestion that degrades gracefully",
+        heading: "Handling messy uploads",
         paragraphs: [
-          "Rather than send every upload to an expensive or slow external API, I built a multi-tiered fallback chain. Digital PDFs go through local stream extraction first — sub-50ms, no network, no third-party cost. Extracted text is validated with regex heuristics for essential contact signals (phone, email, LinkedIn); if it fails, the pipeline falls back to IBM Docling for layout-aware conversion, and finally to Docling with forced OCR for scanned image PDFs.",
+          "Sending every upload to an external parsing API would have been slow and expensive, and most resumes don't need it. So the pipeline **tries the cheapest option first and only escalates when it has to**.",
+          "Digital PDFs go through local text extraction, which ==takes under 50ms== and never leaves our server. The result is checked with regex heuristics for basic contact details like a phone number, email or LinkedIn URL. If those are missing, the text probably came out garbled, so the file goes to **IBM Docling** for layout-aware conversion. If that still fails, which usually means a scanned image, Docling runs again with **OCR** forced on.",
+        ],
+        diagram: {
+          title: "Upload fallback chain",
+          steps: [
+            {
+              nodes: [
+                {
+                  title: "Upload",
+                  meta: "PDF, DOC or DOCX",
+                  detail:
+                    "Users upload whatever they have. Most files are digital PDFs, but scans and Word documents come in too.",
+                },
+              ],
+            },
+            {
+              label: "try the cheap path first",
+              nodes: [
+                {
+                  title: "Local text extraction",
+                  meta: "under 50ms, no network",
+                  detail:
+                    "Reads the text stream straight out of digital PDFs. No external calls and no cost per file.",
+                },
+              ],
+            },
+            {
+              label: "no phone, email or LinkedIn found",
+              nodes: [
+                {
+                  title: "Docling",
+                  meta: "layout-aware conversion",
+                  detail:
+                    "If the contact check fails, the file goes to IBM Docling, which handles columns and complex layouts much better than a raw text stream.",
+                },
+              ],
+            },
+            {
+              label: "still unreadable, usually a scan",
+              nodes: [
+                {
+                  title: "Docling with OCR",
+                  meta: "force_ocr",
+                  detail:
+                    "The last resort for scanned or image-only PDFs. It's the slowest step, so only files that need it end up here.",
+                },
+              ],
+            },
+            {
+              label: "clean text",
+              nodes: [
+                {
+                  title: "Structured parsing",
+                  meta: "Vercel AI SDK + Zod",
+                  detail:
+                    "The text goes to the model with a strict Zod schema and comes back as validated JSON: basics, education, work, skills, certifications and custom sections.",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        heading: "Parsing we can trust",
+        paragraphs: [
+          "Parsing started out as Langflow workflows. We moved the core of it to the **Vercel AI SDK** with OpenAI and Azure OpenAI models. I picked a model that **strictly respects temperature 0**, because newer reasoning models would sometimes invent fields or return different results for the same file. Every response is checked against a strict **Zod** schema.",
+          "Uploaded resumes are untrusted input, so there's a **prompt-injection guard** that makes the model treat resume text purely as data to analyze, never as instructions. The parser also tags every work experience bullet with a finance domain, like statutory audit, internal audit, direct tax, indirect tax or risk advisory. The scorer uses those tags later.",
         ],
       },
       {
-        heading: "Structured AI parsing you can trust",
+        heading: "Generation and scoring",
         paragraphs: [
-          "The parsing pipeline started in Langflow workflows; I transitioned the core to the Vercel AI SDK with OpenAI and Azure OpenAI models. I chose a model that strictly honours temperature 0 to avoid hallucinated fields and rescan variance, and enforced strict Zod schemas so the model returns validated JSON covering basics, education, work, skills, certifications, and custom sections.",
-          "Because uploaded resumes are untrusted input, I engineered a security boundary so the model treats resume text purely as data to analyse, never as instructions to follow. The parser also classifies each work-experience bullet by finance domain — statutory audit, internal audit, direct tax, indirect tax, risk advisory — which feeds scoring downstream.",
+          "I built three generators: a **summary generator** that takes domain, seniority and the target job description into account, a **work experience generator** that writes measurable, achievement-focused bullets, and a **skills generator** that compares the resume against a JD and suggests what's missing.",
+          "ATS scoring runs in two phases in Express. Phase one does structured extraction. Phase two runs grammar, seniority depth and JD relevance checks in parallel. **The score itself doesn't come from the model.** A keyword taxonomy engine matches bullets against validated finance-domain taxonomies, so ==the same resume gets the same score every time== and we spend far fewer tokens.",
+          "The editor is built with **React** and **Redux Toolkit**. It has drag-and-drop section ordering, a live A4 preview and instant ATS feedback.",
         ],
-      },
-      {
-        heading: "Generative features and deterministic scoring",
-        paragraphs: [
-          "On the generative side I built an AI Summary Generator conditioned on domain, seniority, and target job description; an AI Work Experience Generator for quantifiable, achievement-oriented bullets; and an AI Skills Generator that runs a semantic gap analysis against a target JD.",
-          "For ATS scoring I architected a two-phase asynchronous fan-out in Express: structured extraction first, then parallel evaluation workers for grammar, seniority depth, and JD relevance. Instead of letting the LLM invent a score, a deterministic keyword taxonomy engine matches bullets against validated domain taxonomies — so scores are fair, reproducible, and much cheaper in tokens.",
-          "The frontend editor, built with React and Redux Toolkit, supports drag-and-drop section ordering, a live A4 print/PDF preview, and instant ATS health-check feedback.",
-        ],
+        diagram: {
+          title: "How an ATS score is produced",
+          steps: [
+            {
+              nodes: [
+                {
+                  title: "Parsed resume",
+                  meta: "plus an optional JD",
+                  detail:
+                    "Output from the parsing step, with every work bullet already tagged by finance domain.",
+                },
+              ],
+            },
+            {
+              label: "phase 1",
+              nodes: [
+                {
+                  title: "Structured extraction",
+                  meta: "Zod schema, temperature 0",
+                  detail:
+                    "Pulls out what the checks need, like roles, bullets, skills and dates, in a fixed shape.",
+                },
+              ],
+            },
+            {
+              label: "phase 2, in parallel",
+              nodes: [
+                {
+                  title: "Grammar",
+                  meta: "worker",
+                  detail:
+                    "Flags grammar and phrasing problems bullet by bullet.",
+                },
+                {
+                  title: "Seniority depth",
+                  meta: "worker",
+                  detail:
+                    "Checks whether the experience reads at the level the candidate is applying for.",
+                },
+                {
+                  title: "JD relevance",
+                  meta: "worker",
+                  detail:
+                    "Compares the resume with the target job description when one is provided.",
+                },
+              ],
+            },
+            {
+              label: "scored by rules, not the model",
+              nodes: [
+                {
+                  title: "Keyword taxonomy engine",
+                  meta: "deterministic",
+                  detail:
+                    "Matches bullets against validated finance-domain taxonomies. Because the score comes from these rules, it's reproducible and cheap to compute.",
+                },
+              ],
+            },
+            {
+              label: "back to the editor",
+              nodes: [
+                {
+                  title: "Score and fixes",
+                  meta: "ATS health check",
+                  detail:
+                    "The candidate sees the score along with specific things to fix, right inside the editor.",
+                },
+              ],
+            },
+          ],
+        },
       },
     ],
     collaboration:
-      "Parts of the backend — the pipeline implementation and the Vercel AI SDK integration — were built in collaboration with two core backend engineers on system planning and implementation. I wasn't the backend lead; I owned my slices end to end.",
+      "I wasn't the backend lead. The pipeline implementation and the Vercel AI SDK integration were planned and built together with the core backend engineering team. **I owned my parts end to end.**",
   },
 };
 
@@ -233,8 +522,8 @@ const internCareerTools: Engagement = {
   slug: "career-tools-frontend",
   name: "Career Tools Frontend & Performance",
   tagline:
-    "Building the user-facing career tools and taking the web app's Lighthouse performance score from 56 to 85+.",
-  role: "Frontend Developer Intern",
+    "Built the main career tools on our web app, then spent a good part of the internship making it faster.",
+  role: "Frontend developer",
   period: "Sep 2024 – Apr 2025",
   stack: [
     "React",
@@ -249,39 +538,81 @@ const internCareerTools: Engagement = {
   ],
   metrics: [
     { value: "56 → 85+", label: "Lighthouse performance" },
-    { value: "6+", label: "career tools instrumented" },
-    { value: "5", label: "production surfaces built" },
+    { value: "6+", label: "tools tracked with PostHog" },
   ],
   highlights: [
-    "Built responsive production interfaces for the Resume Scorer, Salary Estimator, Articleship Scorer, User Dashboard, and Home Page using React, TypeScript, Redux Toolkit, TanStack Query, Tailwind CSS, shadcn/ui, and Zod.",
-    "Drove a frontend performance overhaul through route-level code splitting, tree shaking, Gzip/Brotli compression, asset preloading, and rendering optimizations, improving Lighthouse performance from 56 to 85+ and Core Web Vitals.",
-    "Integrated PostHog analytics to track authenticated user journeys and conversion/drop-off funnels across 6+ career tools, and implemented recovery handling for stale dynamic-import failures after deployments.",
+    "Built the frontend for the **Resume Scorer, Salary Estimator and Articleship Scorer**, plus the user dashboard and home page.",
+    "Split code by route, set up compression and tree shaking, and preloaded key assets. Lighthouse performance went ==from 56 to 85+==.",
+    "Set up **PostHog** to see where users dropped off across 6+ tools, and fixed a bug where stale chunks after a deploy sent users into an endless reload loop.",
   ],
   caseStudy: {
     summary:
-      "Complete frontend flows for five production surfaces, a measurable performance overhaul, and the analytics needed to see where users got stuck.",
+      "Frontend for five production screens, a performance overhaul that took Lighthouse from 56 to 85+, and the analytics that showed us where users got stuck.",
     context:
-      "As a frontend intern I focused entirely on the core user-facing tools web app: a React + Vite + TypeScript monorepo styled with Tailwind, with Redux Toolkit and TanStack Query for state and data.",
+      "As a frontend intern I worked on the main career tools web app: a **React, Vite and TypeScript** monorepo with Tailwind, Redux Toolkit and TanStack Query.",
     sections: [
       {
-        heading: "Interfaces shipped",
+        heading: "What I built",
         paragraphs: [
-          "I implemented the complete frontend and responsive flows for the Resume Scorer (desktop and mobile result screens with grammar, impact, and formatting breakdowns plus interactive history), the Salary Estimator (modular UI powered by custom React Query hooks), and the Articleship Scorer (an end-to-end evaluation flow with score reveal animations and error handling). I also built the User Dashboard and primary Home Page with accessible shadcn/ui components and Zod-validated forms.",
+          "I built the full frontend for the **Resume Scorer**, including desktop and mobile result screens with grammar, impact and formatting breakdowns and a history view. I built the **Salary Estimator** on top of custom React Query hooks, and the **Articleship Scorer** from start to finish, with a score reveal and proper error handling. I also built the user dashboard and the home page with shadcn/ui components and Zod-validated forms.",
         ],
       },
       {
-        heading: "Performance overhaul",
+        heading: "Making it faster",
         paragraphs: [
-          "Slow initial loads were hurting Core Web Vitals on the landing page and tools. I restructured the Vite build: route-level code splitting with React.lazy and Suspense backed by tailored skeleton loaders; automated Gzip and Brotli compression for assets over 10KB; and monorepo-wide tree-shaking with sideEffects audits across shared packages.",
-          "On the critical rendering path, I preloaded hero WebP assets with high fetch priority, preloaded carousel visuals programmatically, and applied font-display: swap to eliminate render-blocking font flashes. Together this significantly reduced JS/CSS payloads and moved the Lighthouse performance score from 56 to 85+, with clear gains in LCP, INP, and TTFB.",
+          "Initial loads were slow and it showed in Core Web Vitals. Most of the fix was in the Vite build. I **split code by route** with React.lazy and Suspense, with a skeleton loader for each route. Assets over 10KB get **Gzip and Brotli** versions at build time. I turned on **tree shaking** across the monorepo and audited sideEffects in every shared package, since one package marked wrong can pull in a lot of code nobody uses.",
+          "For the critical rendering path I preloaded the hero WebP images with high fetch priority, preloaded carousel images from code, and set font-display: swap so fonts stopped blocking render. JS and CSS payloads dropped a lot, and ==Lighthouse performance went from 56 to 85+== with better LCP, INP and TTFB.",
         ],
       },
       {
-        heading: "Observability and stability",
+        heading: "Analytics and a reload loop",
         paragraphs: [
-          "I integrated PostHog with user identification synced to Redux auth state, so we could track sessions, conversion and drop-off funnels across 6+ career tools, and pinpoint UI friction during test submissions.",
-          "I also fixed a nasty production issue: stale dynamic-import cache misses after deployments were causing infinite reload loops. A sessionStorage-based chunk reload recovery guard resolved it.",
+          "I set up **PostHog** with user identification tied to our Redux auth state. That gave us sessions, conversion and drop-off funnels across ==6+ tools==, and showed exactly where people got stuck while submitting tests.",
+          "I also fixed a production bug where users got stuck in an **endless reload loop after deploys**. Each deploy replaces the hashed JS chunks, so a tab opened before the deploy would ask for a chunk that no longer existed. Reloading on that error is the usual fix, but when the reload didn't solve it, the page reloaded again, forever. I added a guard that uses **sessionStorage** to allow one reload per session and then stop.",
         ],
+        diagram: {
+          title: "The chunk reload guard",
+          steps: [
+            {
+              nodes: [
+                {
+                  title: "New deploy",
+                  meta: "chunk hashes change",
+                  detail:
+                    "Vite gives every chunk a content hash, so each deploy replaces the old files with new names.",
+                },
+              ],
+            },
+            {
+              label: "an old tab opens a lazy route",
+              nodes: [
+                {
+                  title: "Dynamic import fails",
+                  meta: "old chunk is gone",
+                  detail:
+                    "A tab that was opened before the deploy asks for a chunk that no longer exists on the server.",
+                },
+              ],
+            },
+            {
+              label: "check sessionStorage",
+              nodes: [
+                {
+                  title: "Reload once",
+                  meta: "no flag yet",
+                  detail:
+                    "Set a flag in sessionStorage and reload. The fresh page picks up the new index.html and the new chunk names.",
+                },
+                {
+                  title: "Don't reload again",
+                  meta: "flag already set",
+                  detail:
+                    "A reload was already tried in this session, so the guard stops here instead of looping.",
+                },
+              ],
+            },
+          ],
+        },
       },
     ],
   },
@@ -297,7 +628,7 @@ export const roles: Role[] = [
     type: "Full-time · Remote",
     location: "Remote",
     summary:
-      "Leading platform-level work across web, mobile, and AI products for a career platform serving finance professionals.",
+      "Promoted from intern in April 2025. I lead the course platform and the mobile app, and build features on our AI career tools.",
     engagements: [courseMarketingPlatform, mobileApp, aiResumeSuite],
   },
   {
@@ -309,7 +640,7 @@ export const roles: Role[] = [
     type: "Internship · Remote",
     location: "Remote",
     summary:
-      "Built the core user-facing career tools and drove the web app's first serious performance overhaul.",
+      "Built the main career tools on the web app and made it a lot faster.",
     engagements: [internCareerTools],
   },
 ];

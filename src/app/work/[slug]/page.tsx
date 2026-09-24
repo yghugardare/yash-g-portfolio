@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLink, ButtonLink, Chip } from "@/components/ui";
+import { ArrowLink, ButtonLink, Chip, RichText } from "@/components/ui";
+import { CountUp } from "@/components/count-up";
+import { FlowDiagram } from "@/components/flow-diagram";
+import { SectionNav } from "@/components/section-nav";
 import {
   engagements,
   getEngagement,
@@ -126,7 +129,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         </div>
 
         <dl
-          className="mt-12 grid grid-cols-2 gap-x-5 gap-y-6 border-y border-line py-6 sm:grid-cols-4 lg:mt-16"
+          className="mt-12 grid grid-cols-2 gap-x-5 gap-y-6 border-y border-line py-6 sm:grid-cols-3 lg:mt-16"
           data-reveal
         >
           {engagement.metrics.map((m) => (
@@ -135,7 +138,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
                 {m.label}
               </dt>
               <dd className="order-1 font-display text-[1.9rem] leading-none text-ink tabular-nums sm:text-[2.3rem]">
-                {m.value}
+                <CountUp value={m.value} />
               </dd>
             </div>
           ))}
@@ -153,29 +156,15 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
               <Chip key={s}>{s}</Chip>
             ))}
           </ul>
-          <nav aria-label="On this page" className="mt-10 hidden lg:block">
-            <p className="eyebrow">Contents</p>
-            <ol className="mt-3 flex flex-col gap-2 text-sm">
-              <li>
-                <a
-                  href="#context"
-                  className="link-rule text-ink-2 hover:text-ink"
-                >
-                  Context
-                </a>
-              </li>
-              {caseStudy.sections.map((s) => (
-                <li key={s.heading}>
-                  <a
-                    href={`#${slugify(s.heading)}`}
-                    className="link-rule text-ink-2 hover:text-ink"
-                  >
-                    {s.heading}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
+          <SectionNav
+            items={[
+              { id: "context", label: "Context" },
+              ...caseStudy.sections.map((s) => ({
+                id: slugify(s.heading),
+                label: s.heading,
+              })),
+            ]}
+          />
         </aside>
 
         <div className="lg:col-span-8 lg:col-start-5">
@@ -192,7 +181,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
               Context
             </h2>
             <p className="mt-4 text-base leading-relaxed text-ink-2 sm:text-[1.0625rem]">
-              {caseStudy.context}
+              <RichText text={caseStudy.context} />
             </p>
           </section>
 
@@ -218,7 +207,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
                       key={p}
                       className="text-base leading-relaxed text-ink-2 sm:text-[1.0625rem]"
                     >
-                      {p}
+                      <RichText text={p} />
                     </p>
                   ))}
                 </div>
@@ -233,10 +222,15 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
                           aria-hidden="true"
                           className="mt-[0.62rem] h-1.5 w-1.5 shrink-0 rounded-[1px] bg-brass"
                         />
-                        <span>{b}</span>
+                        <span>
+                          <RichText text={b} />
+                        </span>
                       </li>
                     ))}
                   </ul>
+                ) : null}
+                {section.diagram ? (
+                  <FlowDiagram diagram={section.diagram} />
                 ) : null}
               </section>
             );
@@ -250,7 +244,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
             >
               <p className="eyebrow">Who did what</p>
               <p className="mt-2 text-[0.9375rem] leading-relaxed text-ink-2">
-                {caseStudy.collaboration}
+                <RichText text={caseStudy.collaboration} />
               </p>
             </aside>
           ) : null}
