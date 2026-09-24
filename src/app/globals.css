@@ -28,6 +28,31 @@
 }
 
 @layer base {
+  /* Dark theme: same tokens, re-mapped. Light values above stay the default. */
+    html.dark {
+      color-scheme: dark;
+      --color-paper: #121418;
+      --color-paper-2: #1a1d23;
+      --color-paper-3: #242830;
+      --color-ink: #ece6d9;
+      --color-ink-2: #c4bdb0;
+      --color-ink-3: #948e83;
+      --color-line: #2a2e36;
+      --color-line-strong: #40454f;
+      --color-brass: #c9954a;
+      --color-brass-deep: #dcae66;
+      --color-brass-soft: #3b301f;
+      --color-sage: #93a585;
+      --color-sage-soft: #263024;
+      --color-plate: #1e2229;
+      --color-plate-2: #262a33;
+      --color-plate-line: #363b45;
+    }
+  
+    html.dark .grain::before {
+      opacity: 0.035;
+      filter: invert(1);
+    }
   html {
     color-scheme: light;
     scroll-behavior: smooth;
@@ -509,6 +534,48 @@
   50% { opacity: 0; }
 }
 
+/* Sun/moon icon: the theme class drives the morph, so the icon is right before hydration. */
+@layer components {
+
+  .theme-icon-core,
+  .theme-icon-cut,
+  .theme-icon-rays {
+    transform-origin: 12px 12px;
+    transition:
+      transform 500ms var(--ease-out-soft),
+      opacity 300ms ease-in-out;
+  }
+
+  .theme-icon-core {
+    transform: scale(0.55);
+  }
+
+  .theme-icon-cut {
+    transform: translate(8px, -8px);
+  }
+
+  html.dark .theme-icon-core {
+    transform: scale(1);
+  }
+
+  html.dark .theme-icon-cut {
+    transform: translate(0, 0);
+  }
+
+  html.dark .theme-icon-rays {
+    opacity: 0;
+    transform: rotate(45deg) scale(0.6);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .theme-icon-core,
+    .theme-icon-cut,
+    .theme-icon-rays {
+      transition: none;
+    }
+  }
+}
 /* Scroll reveal. Elements start hidden only when JS runs (html.js), so no-JS visitors see everything. */
 @layer components {
   html.js [data-reveal] {

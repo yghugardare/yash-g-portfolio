@@ -91,10 +91,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${fraunces.variable} ${geist.variable} ${geistMono.variable} ${sourceSerif.variable} h-full antialiased`}
     >
       <head>
-        {/* Marks JS availability before first paint so scroll-reveal only hides content when it can reveal it. */}
+        {/* Marks JS availability and restores a saved dark theme before first paint. Light is the default. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js')",
+            __html:
+              "document.documentElement.classList.add('js');try{if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
           }}
         />
       </head>
