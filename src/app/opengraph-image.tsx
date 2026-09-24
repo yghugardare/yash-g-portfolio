@@ -60,6 +60,9 @@ export default async function OpenGraphImage() {
         <div style={{ fontSize: 84, lineHeight: 1.02, letterSpacing: -2 }}>
           {profile.headline.lead}
         </div>
+        <div style={{ fontSize: 84, lineHeight: 1.02, letterSpacing: -2 }}>
+          {profile.headline.middle}
+        </div>
         <div
           style={{
             fontSize: 84,
@@ -70,9 +73,6 @@ export default async function OpenGraphImage() {
           }}
         >
           {profile.headline.emphasis}
-        </div>
-        <div style={{ fontSize: 84, lineHeight: 1.02, letterSpacing: -2 }}>
-          {profile.headline.tail}
         </div>
       </div>
 

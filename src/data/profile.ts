@@ -20,12 +20,14 @@ export const profile = {
   },
   resumeUrl: "/Yash_Ghugardare_FullStack_Engineer_Resume.pdf",
   headline: {
-    lead: "I build production software",
-    emphasis: "that has to keep working",
-    tail: "after launch.",
+    lead: "Hi, I'm Yash.",
+    middle: "I turn ideas into",
+    emphasis: "working software.",
   },
   intro:
-    "Full-stack engineer with 2+ years shipping web, mobile, and AI-powered products at CA Monk. I own features from technical design through implementation, review, debugging, and production delivery.",
+    "I'm a full-stack engineer with 2+ years of experience building web, mobile, and AI products. I work across the stack and like owning problems end to end, from figuring out the right approach to shipping, measuring, and improving what goes live.",
+  seeking:
+    "I'm looking for full-stack and product engineering roles where I can help shape the product and own what I ship. Also open to forward-deployed engineering opportunities.",
   summary: [
     "I'm a full-stack engineer based in Pune. Since 2024 I've worked at CA Monk, a career platform for finance professionals, where I've gone from frontend intern to leading the migration of the company's course marketing platform and the launch of its first mobile app.",
     "The work I like most sits at the seams: caching layers that have to survive real traffic, ingestion pipelines that have to accept messy user input, native shells that have to make web code feel at home on a phone. I care about the boring parts because that's where products fail.",
