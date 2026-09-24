@@ -54,7 +54,7 @@ export function websiteJsonLd(): JsonLd {
 }
 
 export function articleJsonLd(input: {
-  slug: string;
+  path: string;
   headline: string;
   description: string;
 }): JsonLd {
@@ -63,8 +63,8 @@ export function articleJsonLd(input: {
     "@type": "Article",
     headline: input.headline,
     description: input.description,
-    url: `${site.url}/work/${input.slug}`,
-    mainEntityOfPage: `${site.url}/work/${input.slug}`,
+    url: `${site.url}${input.path}`,
+    mainEntityOfPage: `${site.url}${input.path}`,
     author: { "@id": `${site.url}/#person` },
     publisher: { "@id": `${site.url}/#person` },
     inLanguage: "en",
