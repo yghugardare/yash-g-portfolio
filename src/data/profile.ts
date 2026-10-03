@@ -31,8 +31,8 @@ export const profile = {
   seeking:
     "Looking for **full-stack**, **product engineering**, or **forward-deployed engineer** roles.",
   summary: [
-    "I like untangling messy problems and finding the simplest solution that holds up. I ask questions early, make tradeoffs clear, and think about the person who will maintain the code next. I'm happy to change my mind when the evidence changes.",
-    "I use AI to explore code, test ideas, and build faster. Clear context and careful review make it useful. The time I save goes into better decisions, and I take responsibility for what I ship.",
+    "I like to understand the problem before I touch the code. I break it down, make clear trade-offs, and own the result end to end. I care about simple solutions, clean execution, and writing code that's easy for the next person to understand, maintain, and build on.",
+    "I use AI to ship faster, but I still own the thinking. I make the calls on architecture, trade-offs, and quality, while AI helps me build, test, debug, and iterate faster.",
   ],
   socials: [
     {
@@ -59,6 +59,7 @@ export const profile = {
   education: {
     degree: "Bachelor of Engineering in Computer Science",
     institution: "Smt. Kashibai Navale College of Engineering",
+    cgpa: "8.72",
     period: "2020 – 2024",
   },
 } as const;

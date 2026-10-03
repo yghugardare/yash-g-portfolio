@@ -44,6 +44,8 @@ export function About() {
                 {profile.education.institution}
               </span>
               <br />
+              <span className="text-ink-2">CGPA: {profile.education.cgpa}</span>
+              <br />
               <span className="text-ink-3">{profile.education.period}</span>
             </dd>
           </div>
