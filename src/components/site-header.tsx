@@ -53,7 +53,7 @@ export function SiteHeader() {
 
   return (
     <header ref={headerRef} className="site-header">
-      <div className="container-x flex h-[72px] items-center justify-between gap-6">
+      <div className="container-x flex h-18 items-center justify-between gap-6">
         <Link
           href="/"
           onClick={() => setOpen(false)}

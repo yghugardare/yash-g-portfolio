@@ -1,5 +1,38 @@
 @import "tailwindcss";
 
+/* Article diagrams use the same theme tokens and easing as the portfolio. */
+@layer components {
+  .ai-diagram {
+    margin-top: 2rem;
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--color-paper-2) 55%, transparent);
+    padding: clamp(1rem, 3vw, 1.5rem);
+  }
+  .ai-node, .ai-workflow-step {
+    border: 1px solid var(--color-line);
+    border-radius: 4px;
+    background: var(--color-paper);
+    padding: 1rem;
+    text-align: center;
+  }
+  .ai-node-active {
+    border-color: var(--color-brass);
+    background: color-mix(in srgb, var(--color-brass-soft) 65%, var(--color-paper));
+  }
+  .ai-workflow-step { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.75rem; }
+  .ai-connector { position: relative; width: 1px; height: 2rem; margin: 0 auto; background: var(--color-line-strong); }
+  .ai-connector::after { content: ""; position: absolute; bottom: 1px; left: -3px; width: 7px; height: 7px; border-right: 1px solid var(--color-line-strong); border-bottom: 1px solid var(--color-line-strong); transform: rotate(45deg); }
+  .ai-connector-active span { position: absolute; left: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--color-brass); animation: ai-transfer 900ms var(--ease-out-soft) both; }
+  .ai-diagram-stage { animation: ai-settle 420ms var(--ease-out-soft) both; }
+  .ai-context-item { border-width: 1px; border-radius: 2px; padding: 0.45rem 0.7rem; font-size: 0.75rem; animation: ai-settle 400ms var(--ease-out-soft) both; }
+  .ai-return-path { margin: 0.75rem 0.5rem 0; border: 1px dashed var(--color-line-strong); border-top: 0; border-radius: 0 0 8px 8px; padding: 0.8rem 0.5rem 0.5rem; text-align: center; font-size: 0.7rem; color: var(--color-ink-3); }
+  @media (width >= 40rem) { .ai-workflow-step { flex-direction: column; gap: 0.7rem; } .ai-branch { border-top: 1px solid var(--color-line-strong); padding-top: 1rem; } }
+  @media (prefers-reduced-motion: reduce) { .ai-diagram-stage, .ai-context-item, .ai-connector-active span { animation: none; } .ai-connector-active span { top: 50%; } }
+}
+@keyframes ai-settle { from { opacity: 0.4; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ai-transfer { from { top: 0; } to { top: calc(100% - 5px); } }
+
 @theme {
   --color-paper: #f4efe6;
   --color-paper-2: #ebe4d6;
@@ -310,6 +343,22 @@
                                                                   box-shadow: 6px 6px 0 0 var(--color-paper-3), 6px 6px 0 1px var(--color-line);
                                                                 }
                                 
+  /* A stable portrait crop keeps the face prominent without stretching the photo. */
+  .hero-portrait-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--color-paper-3);
+  }
+
+  .hero-portrait-image {
+    object-fit: cover;
+    object-position: 50% 18%;
+    transform: scale(1.2);
+    transform-origin: 65% 35%;
+  }
+
                                                                 .hero-status {
                                                                   display: grid;
                                                                   gap: 6px;
@@ -325,6 +374,7 @@
                                                                 }
                                 
                                                                 .hero-status-dot {
+                                                                  position: relative;
                                                                   width: 8px;
                                                                   height: 8px;
                                                                   flex-shrink: 0;
@@ -332,6 +382,17 @@
                                                                   background: var(--color-sage);
                                                                   box-shadow: 0 0 0 4px var(--color-sage-soft);
                                                                 }
+
+  .hero-status-dot::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border: 1px solid var(--color-sage);
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    animation: hero-status-pulse 2.4s ease-out infinite;
+  }
                                 
                                                                 .hero-status-text {
                                                                   padding-left: 18px;
@@ -415,6 +476,7 @@
       }
     .hero-title { font-size: clamp(3.2rem, 4.65vw, 4.4rem); }
     .hero-intro { margin-top: 24px; }
+    .hero-portrait-image { transform: scale(1.2); }
                                                                                                                                 /* On desktop the portrait and status share one framed card. */
                                                                                                                                 .hero-aside {
                                                                                                                                   grid-template-columns: minmax(0, 1fr);
@@ -463,6 +525,10 @@
     .resume-footer .portfolio-button { padding-inline: 12px; gap: 8px; }
   }
   @media (prefers-reduced-motion: reduce) {
+    .hero-status-dot::after {
+      animation: none;
+    }
+
     .header-link,
       .header-link::after,
       .portfolio-button,
@@ -470,6 +536,11 @@
         transition: none;
       }
   }
+}
+
+@keyframes hero-status-pulse {
+  0% { transform: scale(0.5); opacity: 0.65; }
+  75%, 100% { transform: scale(1.5); opacity: 0; }
 }
 
 /* "Projects" gets struck through, then "Products" wipes in. Final state is the default for no-JS and reduced motion. */

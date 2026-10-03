@@ -42,15 +42,16 @@ export function Hero() {
         </div>
         <div className="hero-aside">
           <div className="hero-portrait">
-            <Image
-              src={profile.photo.src}
-              alt={profile.photo.alt}
-              width={profile.photo.width}
-              height={profile.photo.height}
-              sizes="(min-width: 1024px) 320px, 140px"
-              preload
-              className="block h-auto w-full rounded-[2px] bg-paper-3"
-            />
+            <div className="hero-portrait-frame">
+              <Image
+                src={profile.photo.src}
+                alt={profile.photo.alt}
+                fill
+                sizes="(min-width: 1024px) 340px, (min-width: 640px) 180px, 140px"
+                preload
+                className="hero-portrait-image"
+              />
+            </div>
           </div>
           <div className="hero-status">
             <p className="hero-status-label">

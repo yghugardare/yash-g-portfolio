@@ -35,5 +35,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...home, ...work, ...projectPages, ...blog];
+  const blogIndex: MetadataRoute.Sitemap = posts.length
+    ? [{ url: `${site.url}/blog`, changeFrequency: "monthly", priority: 0.6 }]
+    : [];
+  return [...home, ...work, ...projectPages, ...blogIndex, ...blog];
 }

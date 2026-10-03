@@ -1,3 +1,5 @@
+import yashPortrait from "../../public/images/yash.png";
+
 export type SocialLink = {
   label: string;
   href: string;
@@ -13,10 +15,10 @@ export const profile = {
   timezone: "IST (UTC+5:30)",
   email: "yashghugardarework@gmail.com",
   photo: {
-    src: "/images/yash.webp",
-    alt: "Illustrated portrait of Yash Ghugardare in a pinstripe suit with arms crossed.",
-    width: 720,
-    height: 866,
+    src: yashPortrait.src,
+    alt: "Portrait of Yash Ghugardare wearing glasses and an olive polo shirt, with arms crossed.",
+    width: yashPortrait.width,
+    height: yashPortrait.height,
   },
   resumeUrl: "/Yash_Ghugardare_FullStack_Engineer_Resume.pdf",
   headline: {
@@ -29,15 +31,9 @@ export const profile = {
   seeking:
     "Looking for **full-stack**, **product engineering**, or **forward-deployed engineer** roles.",
   summary: [
-    "I'm a full-stack engineer based in Pune. Since 2024 I've worked at CA Monk, a career platform for finance professionals, where I've gone from frontend intern to leading the migration of the company's course marketing platform and the launch of its first mobile app.",
-    "The work I like most sits at the seams: caching layers that have to survive real traffic, ingestion pipelines that have to accept messy user input, native shells that have to make web code feel at home on a phone. I care about the boring parts because that's where products fail.",
+    "I like untangling messy problems and finding the simplest solution that holds up. I ask questions early, make tradeoffs clear, and think about the person who will maintain the code next. I'm happy to change my mind when the evidence changes.",
+    "I use AI to explore code, test ideas, and build faster. Clear context and careful review make it useful. The time I save goes into better decisions, and I take responsibility for what I ship.",
   ],
-  aiStatement: {
-    heading: "How I work with AI",
-    body: "I use AI to accelerate implementation, but I own the problem-solving, architecture, technical decisions, code review, debugging, and final quality of everything I ship.",
-    detail:
-      "It makes me faster at the typing. It doesn't decide what gets built, how it's structured, or whether it's good enough to go out.",
-  },
   socials: [
     {
       label: "GitHub",
