@@ -1,0 +1,266 @@
+.figure {
+  min-width: 0;
+}
+
+.scene {
+  --ice-tip-top: color-mix(in srgb, var(--color-paper) 55%, white);
+  --ice-tip-bottom: var(--color-brass-soft);
+  --ice-depth-top: color-mix(in srgb, var(--color-brass) 52%, transparent);
+  --ice-depth-middle: color-mix(in srgb, var(--color-brass) 30%, transparent);
+  --ice-depth-bottom: color-mix(in srgb, var(--color-brass) 12%, transparent);
+  --ice-edge: color-mix(in srgb, var(--color-brass) 36%, transparent);
+  --ice-facet: color-mix(in srgb, var(--color-paper) 25%, transparent);
+  position: relative;
+  min-height: 440px;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  background: var(--color-paper);
+}
+
+:global(html.dark) .scene {
+  --ice-tip-top: var(--color-ink);
+  --ice-tip-bottom: color-mix(in srgb, var(--color-brass) 55%, var(--color-paper-2));
+  --ice-depth-top: color-mix(in srgb, var(--color-brass) 48%, transparent);
+  --ice-depth-middle: color-mix(in srgb, var(--color-brass) 28%, transparent);
+  --ice-depth-bottom: color-mix(in srgb, var(--color-brass) 10%, transparent);
+  --ice-edge: color-mix(in srgb, var(--color-brass) 30%, transparent);
+  --ice-facet: color-mix(in srgb, var(--color-brass-soft) 45%, transparent);
+}
+
+.sky,
+.water,
+.berg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sky {
+  bottom: 69%;
+  background: linear-gradient(var(--color-paper), var(--color-paper-2));
+}
+
+.water {
+  top: 31%;
+  background: linear-gradient(
+    color-mix(in srgb, var(--color-brass) 10%, var(--color-paper-2)),
+    var(--color-paper) 80%
+  );
+}
+
+.glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 256px;
+  height: 256px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-brass) 12%, transparent), transparent 68%);
+  pointer-events: none;
+  animation: glow 7s ease-in-out infinite;
+}
+
+.berg {
+  animation: float 7s ease-in-out infinite;
+}
+
+.berg svg {
+  width: 100%;
+  height: 100%;
+}
+
+.waterline {
+  position: absolute;
+  top: 31%;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-brass) 55%, transparent),
+    color-mix(in srgb, var(--color-brass) 20%, transparent),
+    color-mix(in srgb, var(--color-brass) 60%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--color-brass) 18%, transparent);
+  pointer-events: none;
+  animation: shimmer 8s linear infinite;
+}
+
+.particle {
+  position: absolute;
+  bottom: 16%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-brass) 45%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  animation: rise linear infinite;
+}
+
+.scanline {
+  position: absolute;
+  right: 7%;
+  left: 7%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-sage) 60%, transparent), transparent);
+  transition: top 1s cubic-bezier(0.5, 0, 0.3, 1);
+  pointer-events: none;
+}
+
+.percentage {
+  position: absolute;
+  left: 7%;
+  font-family: var(--font-mono);
+}
+
+.percentage strong {
+  display: block;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.percentage > span {
+  display: block;
+  margin-top: 6px;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-2);
+}
+
+.above { top: 8%; }
+.below { bottom: 8%; color: var(--color-brass-deep); }
+
+.layer {
+  position: absolute;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.tick {
+  width: 24px;
+  height: 1px;
+  flex-shrink: 0;
+  background: var(--ice-edge);
+  transition: background-color 500ms, box-shadow 500ms;
+}
+
+.layerText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-family: var(--font-mono);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.label {
+  font-size: 10.5px;
+  color: var(--color-ink-2);
+  transition: color 500ms;
+}
+
+.hint {
+  max-height: 0;
+  overflow: hidden;
+  margin-top: 0;
+  opacity: 0;
+  font-size: 9.5px;
+  color: var(--color-sage);
+  transition: opacity 500ms, max-height 500ms, margin-top 500ms;
+}
+
+.layer[aria-pressed="true"] .tick {
+  background: var(--color-sage);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-sage) 50%, transparent);
+}
+
+.layer[aria-pressed="true"] .label {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.layer[aria-pressed="true"] .hint {
+  max-height: 18px;
+  margin-top: 3px;
+  opacity: 1;
+}
+
+.caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--color-ink-3);
+}
+
+.motionControl {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  flex-shrink: 0;
+  padding-inline: 4px;
+  color: var(--color-ink-2);
+  cursor: pointer;
+}
+
+.scene[data-paused="true"] .berg,
+.scene[data-paused="true"] .glow,
+.scene[data-paused="true"] .particle,
+.scene[data-paused="true"] .waterline {
+  animation-play-state: paused;
+}
+
+@media (width >= 40rem) {
+  .scene { min-height: 500px; aspect-ratio: 560 / 500; }
+  .layer { left: 54%; right: auto; gap: 12px; }
+  .tick { width: 40px; }
+  .label { font-size: 11px; }
+  .hint { font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .berg, .glow, .particle, .waterline { animation: none; }
+  .glow { transform: translate(-50%, -50%); }
+  .scanline, .tick, .label, .hint { transition: none; }
+  .motionControl { display: none; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(5px) rotate(0.35deg); }
+}
+
+@keyframes glow {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
+@keyframes shimmer {
+  from { background-position: 0% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes rise {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 0.55; }
+  85% { opacity: 0.3; }
+  100% { transform: translateY(-260px); opacity: 0; }
+}
