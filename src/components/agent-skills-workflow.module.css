@@ -1,0 +1,114 @@
+.workflow {
+  --flow-accent: color-mix(in srgb, var(--color-sage) 80%, var(--color-ink));
+  --flow-soft: color-mix(in srgb, var(--flow-accent) 13%, var(--color-paper));
+  --flow-edge: color-mix(in srgb, var(--flow-accent) 40%, var(--color-line));
+  min-width: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  background: var(--color-paper);
+  overflow: hidden;
+}
+.heading { margin: 0; padding: 25px 24px; font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); line-height: 1.15; color: var(--color-ink); }
+.tabs { position: relative; display: flex; min-width: 0; overflow-x: auto; overscroll-behavior-x: contain; border-block: 1px solid var(--color-line); scrollbar-width: thin; scrollbar-color: var(--flow-edge) transparent; }
+.tabs button { position: relative; flex: 1 0 auto; min-width: 96px; padding: 16px 14px; border: 0; border-right: 1px solid var(--color-line); border-bottom: 2px solid transparent; background: transparent; color: var(--color-ink-2); font-family: var(--font-mono); font-size: 11px; white-space: nowrap; cursor: pointer; transition: background .25s, color .25s; }
+.tabs button:last-child { border-right: 0; }
+.tabs button:hover { color: var(--color-ink); background: var(--color-paper-2); }
+.tabs button[aria-selected="true"] { background: var(--flow-soft); border-bottom-color: var(--flow-accent); color: var(--flow-accent); font-weight: 600; }
+.tabs button:focus-visible { outline-offset: -4px; }
+.body { display: grid; grid-template-columns: minmax(0,1fr); }
+.visual { position: relative; display: flex; justify-content: center; align-items: center; min-height: 255px; padding: 28px 24px; isolation: isolate; overflow: hidden; border-bottom: 1px solid var(--color-line); }
+.glow { position: absolute; inset: 5%; z-index: -1; background: radial-gradient(ellipse at center, color-mix(in srgb, var(--flow-accent) 12%, transparent), transparent 65%); animation: breathe 5s ease-in-out infinite; }
+.scene { width: 100%; max-width: 340px; font-family: var(--font-mono); font-size: 11px; color: var(--color-ink-2); animation: reveal .35s ease-out both; }
+.card { position: relative; width: 100%; max-width: 310px; margin-inline: auto; padding: 22px; overflow: hidden; border: 1px solid var(--color-line); border-radius: 12px; background: var(--color-paper-2); box-shadow: 0 20px 45px -32px color-mix(in srgb, var(--color-ink) 25%, transparent); }
+.sceneLabel { margin: 0 0 18px; font-size: 9px; letter-spacing: .09em; line-height: 1.5; color: var(--color-ink-3); }
+.lines { display: flex; flex-direction: column; gap: 12px; }
+.lineRow { display: flex; align-items: center; gap: 12px; min-height: 12px; }
+.number { display: grid; place-items: center; flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--flow-edge); color: var(--flow-accent); font-size: 10px; }
+.lineTrack { display: block; height: 8px; overflow: hidden; border-radius: 4px; background: var(--color-line); }
+.lineTrack span { display: block; height: 100%; background: linear-gradient(90deg, color-mix(in srgb, var(--flow-accent) 45%, transparent), color-mix(in srgb, var(--flow-accent) 10%, transparent)); transform-origin: left; animation: fill 3s ease-in-out infinite alternate; }
+.chip { display: block; width: fit-content; max-width: 100%; margin-top: 20px; padding: 6px 9px; border: 1px solid var(--flow-edge); border-radius: 7px; background: var(--flow-soft); color: var(--flow-accent); font-size: 9px; line-height: 1.5; }
+.scan { position: absolute; inset: 0 0 auto; height: 36px; background: linear-gradient(transparent, color-mix(in srgb, var(--flow-accent) 13%, transparent), transparent); animation: scan 4s linear infinite; pointer-events: none; }
+.choices { max-width: 310px; margin-inline: auto; }
+.choiceRow { display: flex; gap: 14px; }
+.node { position: relative; flex: 1; padding: 20px 10px; border: 1px solid var(--color-line); border-radius: 12px; background: var(--color-paper-2); text-align: center; font-size: 11px; color: var(--color-ink); }
+.node small { display: block; margin-top: 8px; font-size: 9px; line-height: 1.5; color: var(--color-ink-3); }
+.selectedNode { border-color: var(--flow-edge); animation: nodePulse 3s ease-in-out infinite; }
+.mutedNode { opacity: .65; }
+.tick { position: absolute; right: -7px; top: -7px; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: var(--flow-accent); color: var(--color-paper); }
+.choices > .chip { margin-inline: auto; }
+.appWindow { padding: 0; max-width: 325px; }
+.windowBar { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 13px; border-bottom: 1px solid var(--color-line); }
+.windowBar i { width: 7px; height: 7px; border-radius: 50%; background: var(--color-line); }
+.windowBar span { margin-left: auto; font-size: 8px; color: var(--flow-accent); }
+.appBody { display: flex; min-height: 153px; }
+.sidebar { display: flex; flex-direction: column; gap: 12px; width: 75px; padding: 16px 12px; border-right: 1px solid var(--color-line); }
+.sidebar span { height: 6px; border-radius: 3px; background: var(--color-line); }
+.sidebar span:nth-child(even) { width: 70%; }
+.appContent { flex: 1; display: grid; grid-template-columns: 1fr 1fr; align-content: start; gap: 10px; padding: 16px; }
+.appContent > span { height: 52px; border-radius: 7px; border: 1px solid var(--color-line); background: var(--color-paper); animation: nodePulse 3s ease-in-out infinite; }
+.appContent > .appFeature { grid-column: 1 / -1; height: 36px; border-color: var(--flow-edge); background: var(--flow-soft); animation-delay: 1s; }
+.prototypeTag { display: block; border-top: 1px solid var(--color-line); padding: 9px 14px; color: var(--flow-accent); font-size: 9px; }
+.checks { display: flex; flex-direction: column; gap: 16px; }
+.checks > div { display: flex; align-items: center; gap: 10px; font-size: 10px; }
+.checks span { display: grid; place-items: center; width: 19px; height: 19px; flex-shrink: 0; border: 1px solid var(--flow-edge); border-radius: 50%; color: var(--flow-accent); animation: nodePulse 2s ease-in-out infinite; }
+.testGrid { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; }
+.testGrid span { display: grid; place-items: center; aspect-ratio: 1; border: 1px solid var(--flow-edge); border-radius: 6px; color: var(--flow-accent); background: var(--flow-soft); animation: nodePulse 2.5s ease-in-out infinite; }
+.documentChips { display: flex; gap: 14px; margin-top: 20px; font-size: 9px; color: var(--color-ink-3); }
+.sync { display: flex; align-items: center; gap: 0; }
+.sync .node { flex: 0 1 88px; min-width: 0; padding-block: 20px; }
+.connection { position: relative; flex: 1; height: 44px; min-width: 64px; background: linear-gradient(90deg, transparent, var(--flow-edge), transparent) center 12px / 100% 1px no-repeat, linear-gradient(90deg, transparent, var(--flow-edge), transparent) center 32px / 100% 1px no-repeat; }
+.connection span { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); background: var(--color-paper); color: var(--flow-accent); border: 1px solid var(--flow-edge); border-radius: 20px; padding: 5px 6px; font-size: 8px; }
+.connection i { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--flow-accent); left: 0; top: 10px; animation: transfer 3s linear infinite; }
+.connection i:nth-child(2) { top: 30px; animation-direction: reverse; }
+.debugBlocks { position: relative; display: flex; gap: 5px; padding-top: 12px; }
+.debugBlocks > span { flex: 1; height: 26px; border: 1px solid var(--color-line); border-radius: 5px; background: var(--color-paper); }
+.debugBlocks > span[data-bug="true"] { background: var(--flow-soft); border-color: var(--flow-accent); }
+.debugBlocks > i { position: absolute; left: 36%; top: 6px; width: 16%; height: 38px; border: 1px solid var(--flow-accent); border-radius: 7px; animation: find 3s ease-in-out infinite; }
+.questions { display: flex; flex-direction: column; gap: 9px; }
+.questions span { display: block; padding: 9px 10px; border: 1px solid var(--color-line); border-radius: 7px; font-size: 10px; animation: nodePulse 3s ease-in-out infinite; }
+.questions span:nth-child(2) { animation-delay: .6s; }.questions span:nth-child(3) { animation-delay: 1.2s; }
+.map { position: relative; height: 225px; }
+.map svg { width: 100%; height: 100%; fill: var(--flow-accent); }
+.mapPath { fill: none; stroke: var(--flow-edge); stroke-width: 2; stroke-dasharray: 4 5; }
+.mapMarker { offset-path: path("M42 166H103V106H198V48H280"); cx: 0; cy: 0; animation: follow 5s linear infinite; }
+.mapStart, .mapEnd, .mapTicket { position: absolute; font-size: 9px; color: var(--color-ink-3); }
+.mapStart { left: 5%; bottom: 7px; }.mapEnd { right: 1%; top: 15px; }.mapTicket { left: 34%; top: 54%; padding: 7px; border: 1px solid var(--flow-edge); border-radius: 6px; background: var(--color-paper-2); color: var(--flow-accent); }
+.tddNodes { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+.tddNodes > span { min-width: 0; flex: 1; padding: 18px 3px; text-align: center; border: 1px solid var(--flow-edge); border-radius: 10px; background: var(--color-paper-2); color: var(--flow-accent); font-size: 10px; animation: nodePulse 3s ease-in-out infinite; }
+.tddNodes > span:first-child { color: var(--color-brass-deep); border-color: var(--color-brass); animation-delay: 0s; }
+.tddNodes > span:nth-of-type(2) { animation-delay: 1s; }.tddNodes > span:nth-of-type(3) { animation-delay: 2s; }
+.tddNodes small { display: block; margin-top: 7px; font-size: 8px; color: var(--color-ink-3); }
+.tddNodes i { font-style: normal; color: var(--flow-accent); }
+.returnLoop { margin-top: 15px; border-top: 1px dashed var(--flow-edge); padding-top: 12px; text-align: center; font-size: 9px; color: var(--color-ink-3); }
+.details { min-width: 0; padding: 28px 24px; }
+.copy { animation: reveal .3s ease-out both; }
+.stage { margin: 0; font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; line-height: 1.7; color: var(--flow-accent); }
+.copy h3 { margin: 16px 0 12px; font-family: var(--font-display); font-size: 25px; line-height: 1.2; color: var(--color-ink); }
+.description { max-width: 43ch; margin: 0; font-size: 15px; line-height: 1.75; color: var(--color-ink-2); }
+.copy ul { display: flex; flex-direction: column; gap: 9px; margin: 18px 0 0; padding: 0; list-style: none; font-family: var(--font-mono); font-size: 11px; color: var(--color-ink-2); }
+.copy li { display: flex; gap: 10px; }.copy li > span { color: var(--flow-accent); }
+.controls { display: flex; align-items: center; gap: 12px; margin-top: 25px; font-family: var(--font-mono); font-size: 10px; font-variant-numeric: tabular-nums; color: var(--color-ink-3); }
+.play { position: relative; display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; border: 1px solid var(--color-line); border-radius: 50%; background: var(--color-paper-2); color: var(--flow-accent); cursor: pointer; }
+.play > svg { width: 16px; height: 16px; }.play > .progress { position: absolute; inset: -1px; width: 40px; height: 40px; transform: rotate(-90deg); fill: none; stroke: var(--color-line); stroke-width: 1.5; }
+.progressFill { stroke: var(--flow-accent); stroke-dasharray: 125.664; stroke-dashoffset: 125.664; animation: progress var(--stage-duration) linear both; }
+.controlHint { font-size: 9px; line-height: 1.5; }
+.note { margin: 0; padding: 14px 24px; border-top: 1px solid var(--color-line); font-size: 11px; line-height: 1.7; color: var(--color-ink-3); }
+.workflow[data-paused="true"] :is(.glow,.lineTrack span,.scan,.selectedNode,.appContent > span,.checks span,.testGrid span,.connection i,.debugBlocks > i,.questions span,.mapMarker,.tddNodes > span,.progressFill) { animation-play-state: paused; }
+@media (min-width: 64rem) {
+  .body { grid-template-columns: minmax(0,1fr) minmax(0,1fr); min-height: 355px; }
+  .visual { border-bottom: 0; border-right: 1px solid var(--color-line); padding: 36px; }
+  .details { padding: 36px 30px; display: flex; flex-direction: column; justify-content: center; }
+  .tabs button { min-width: 0; flex: 1 1 0; padding-inline: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workflow *, .workflow *::before, .workflow *::after { animation: none !important; transition: none !important; }
+}
+@keyframes reveal { from { opacity: .4; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes breathe { 0%,100% { opacity: .55; transform: scale(.95); } 50% { opacity: 1; transform: scale(1.05); } }
+@keyframes fill { from { transform: scaleX(.55); } to { transform: scaleX(1); } }
+@keyframes scan { from { transform: translateY(-36px); } to { transform: translateY(230px); } }
+@keyframes nodePulse { 0%,100% { box-shadow: 0 0 0 transparent; } 50% { box-shadow: 0 0 20px -5px color-mix(in srgb, var(--flow-accent) 25%, transparent); } }
+@keyframes transfer { 0% { left: 0; opacity: 0; } 15%,85% { opacity: 1; } 100% { left: calc(100% - 5px); opacity: 0; } }
+@keyframes find { 0%,100% { transform: translateX(-18px); } 50% { transform: translateX(12px); } }
+@keyframes follow { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes progress { to { stroke-dashoffset: 0; } }

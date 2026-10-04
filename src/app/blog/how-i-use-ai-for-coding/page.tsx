@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { AiCodingIceberg } from "@/components/ai-coding-iceberg";
+import { AiCodingMeme } from "@/components/ai-coding-meme";
+import { AgentSkillsWorkflow } from "@/components/agent-skills-workflow";
+import { AiCodeReviewSection } from "@/components/ai-code-review-section";
 import { aiCodingPost as post } from "@/data/blog";
 import { profile } from "@/data/profile";
+import { ArrowLink } from "@/components/ui";
 
 const path = `/blog/${post.slug}`;
 
@@ -27,15 +31,20 @@ export const metadata: Metadata = {
 export default function AiCodingPage() {
   return (
     <article className="container-x py-12 sm:py-16 lg:py-20">
-      <header>
-        <h1 className="max-w-3xl text-[2.7rem] leading-[1.04] sm:text-[4rem] lg:text-[4.7rem]">
-          How I use AI<br />
-          <em className="font-normal text-brass-deep">for coding.</em>
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-2 sm:text-xl">
-          A practical look at the context, conversations, and checks behind code I
-          can stand behind.
-        </p>
+      <header className="grid items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)] lg:gap-12">
+        <div>
+          <h1 className="max-w-3xl text-[2.7rem] leading-[1.04] sm:text-[4rem] lg:text-[4.7rem]">
+            How I use AI<br />
+            <em className="font-normal text-brass-deep">for coding.</em>
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-2 sm:text-xl">
+            A practical look at the context, conversations, and checks behind code I
+            can stand behind.
+          </p>
+        </div>
+        <div className="w-full max-w-[440px] lg:justify-self-end">
+          <AiCodingMeme />
+        </div>
       </header>
 
       <section
@@ -152,6 +161,124 @@ export default function AiCodingPage() {
             Claude Code
           </a>{" "}
         </p>
+      </section>
+      <section
+        aria-labelledby="skills-title"
+        className="mt-14 border-t border-line pt-10 sm:mt-16 sm:pt-12"
+      >
+        <p className="eyebrow">Agent skills</p>
+        <h2 id="skills-title" className="mt-4 text-3xl leading-tight sm:text-[2.5rem]">
+          A workflow I can use again.
+        </h2>
+        <div className="mt-6 max-w-3xl space-y-5 text-base leading-[1.85] text-ink-2 sm:text-[1.0625rem]">
+          <p>
+            While prompts are great for one-time requests, we have{" "}
+            <mark className="highlight">agent skills</mark> for work we want to
+            repeat. A skill packages a procedure in a <code className="font-mono text-[0.85em] text-ink">SKILL.md</code>{" "}
+            file, with references or scripts when needed. I reach for one when I
+            keep correcting the same part of a task.
+          </p>
+          <p>
+            Several skills can form an agentic workflow: clarify the request,
+            build from the agreed plan, then verify and document the change.
+            Each step leaves a file or result the next can inspect. I still
+            decide when the work is ready to move on.
+          </p>
+        </div>
+
+        <div className="mt-8"><AgentSkillsWorkflow kind="engineering" /></div>
+        <p className="mt-5 max-w-3xl text-base leading-[1.85] text-ink-2 sm:text-[1.0625rem]">
+          <a className="link-rule text-ink" href="https://github.com/jsmastery-pro/skills">JavaScript Mastery&apos;s engineering skills</a>{" "}
+          cover this delivery loop. I find the structure useful when I&apos;m
+          building something I&apos;ll have to maintain: the plan, checks, and
+          project notes stay alongside the code.
+        </p>
+
+        <div className="mt-10">
+          <h3 className="text-2xl leading-tight">Start with one repeating correction.</h3>
+          <div className="mt-5 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
+            <div className="space-y-5 text-base leading-[1.85] text-ink-2 sm:text-[1.0625rem]">
+              <p>
+                I put project skills in <code className="font-mono text-[0.85em] text-ink">.agents/skills/</code>{" "}
+                for Codex or <code className="font-mono text-[0.85em] text-ink">.claude/skills/</code>{" "}
+                for Claude Code. I call them with <code className="font-mono text-[0.85em] text-ink">$skill-name</code>{" "}
+                or <code className="font-mono text-[0.85em] text-ink">/skill-name</code>, respectively;
+                compatible agents can also choose from the description.
+              </p>
+              <p>
+                To write my own, I create a folder with a <code className="font-mono text-[0.85em] text-ink">SKILL.md</code>{" "}
+                file. The header names the skill and says when it applies. The
+                body explains the work and the result I expect.
+              </p>
+            </div>
+            <div className="min-w-0 overflow-hidden rounded border border-line bg-paper-2">
+              <p className="border-b border-line px-5 py-3 font-mono text-xs text-ink-3">review-change/SKILL.md</p>
+              <pre className="overflow-x-auto px-5 py-5 font-mono text-xs leading-[1.85] text-ink-2"><code>{`---
+name: review-change
+description: Review a diff for regressions
+  and missing tests before a pull request.
+---
+Read the diff and relevant callers.
+Report findings with file paths and
+a way to reproduce each issue.`}</code></pre>
+            </div>
+          </div>
+          <ul className="mt-6 grid gap-x-8 gap-y-3 text-sm leading-relaxed text-ink-2 sm:grid-cols-2">
+            <li className="flex gap-3"><span aria-hidden="true" className="text-brass-deep">01</span>Give it one job and a clear trigger.</li>
+            <li className="flex gap-3"><span aria-hidden="true" className="text-brass-deep">02</span>Keep the instructions short; link deeper references.</li>
+            <li className="flex gap-3"><span aria-hidden="true" className="text-brass-deep">03</span>Try real tasks, including ones it should stay out of.</li>
+            <li className="flex gap-3"><span aria-hidden="true" className="text-brass-deep">04</span>Cut lines that don&apos;t improve the result.</li>
+          </ul>
+          <p className="mt-5 text-xs leading-relaxed text-ink-3">
+            Authoring references:{" "}
+            <a className="link-rule" href="https://learn.chatgpt.com/docs/build-skills">Codex skills</a>{" "}
+            &middot;{" "}
+            <a className="link-rule" href="https://code.claude.com/docs/en/skills">Claude Code skills</a>{" "}
+            &middot;{" "}
+            <a className="link-rule" href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices">Claude authoring best practices</a>
+          </p>
+        </div>
+
+        <p className="mt-10 max-w-3xl text-base leading-[1.85] text-ink-2 sm:text-[1.0625rem]">
+          I also use <a className="link-rule text-ink" href="https://github.com/mattpocock/skills">Matt Pocock&apos;s skills</a>.
+          They turn engineering habits into repeatable steps: question the brief,
+          settle the design, build a thin slice, and keep feedback close. This is
+          how I connect them, with Wayfinder for bigger unknowns and a prototype
+          when I need to see an idea working before deciding.
+        </p>
+        <div className="mt-8"><AgentSkillsWorkflow kind="pocock" /></div>
+        <p className="mt-5 max-w-3xl text-base leading-[1.85] text-ink-2 sm:text-[1.0625rem]">
+          One idea from <a className="link-rule" href="https://www.youtube.com/watch?v=QsU0f-547rQ">this walkthrough</a>{" "}
+          stuck with me: start with the correction you keep making. I borrow a
+          skill&apos;s method, try it on my own work, and trim what adds nothing.
+        </p>
+        <p className="mt-5 text-xs leading-relaxed text-ink-3">
+          Explore Matt&apos;s{" "}
+          <a className="link-rule" href="https://github.com/mattpocock/skills/blob/main/docs/engineering/ask-matt.md">workflow guide</a>{" "}
+          for the branches between these steps. The stage details name the skills; invocation syntax depends on the agent.
+        </p>
+      </section>
+      <AiCodeReviewSection />
+      <section
+        aria-labelledby="closing-title"
+        className="mt-14 border-t border-line pt-10 sm:mt-16 sm:pt-12"
+      >
+        <p className="eyebrow">A final note</p>
+        <h2 id="closing-title" className="mt-4 text-3xl leading-tight sm:text-[2.5rem]">
+          Learning as I go.
+        </h2>
+        <p className="mt-6 max-w-3xl text-base leading-[1.85] text-ink-2 sm:text-[1.0625rem]">
+          That&apos;s how I use AI in my day-to-day work. I&apos;m still learning
+          and experimenting, and I&apos;ll update this blog as I find better
+          ways to work.
+        </p>
+        <div className="mt-6 max-w-3xl rounded border border-line bg-paper-2 px-5 py-5 sm:px-6">
+          <p className="text-base leading-relaxed text-ink-2">
+            If you&apos;re hiring or need someone to contribute to your project,
+            I&apos;d love to hear what you&apos;re building.
+          </p>
+          <ArrowLink href="/#contact" className="mt-4">Get in touch</ArrowLink>
+        </div>
       </section>
     </article>
   );
