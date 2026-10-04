@@ -60,7 +60,13 @@ export function ContactComposer({ email }: { email: string }) {
     () => "",
   );
   const current = TOPICS[topic];
-  const mailto = `mailto:${email}?subject=${encodeURIComponent(current.subject)}&body=${encodeURIComponent(current.body)}`;
+  const gmail = `https://mail.google.com/mail/?${new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to: email,
+    su: current.subject,
+    body: current.body,
+  })}`;
 
   async function copyEmail() {
     try {
@@ -139,13 +145,15 @@ export function ContactComposer({ email }: { email: string }) {
 
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
           <p className="text-xs text-ink-3">
-            Opens in your email app. Edit anything before sending.
+            Opens a Gmail draft in a new tab. Edit it before sending.
           </p>
           <a
-            href={mailto}
+            href={gmail}
+            target="_blank"
+            rel="noopener noreferrer"
             className="portfolio-button portfolio-button-primary group"
           >
-            Open in email
+            Open in Gmail
             <Arrow className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
           </a>
         </div>

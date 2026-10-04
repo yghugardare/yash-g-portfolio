@@ -41,14 +41,28 @@ export function SiteHeader() {
   }, [open]);
 
   useEffect(() => {
-    const sections = navItems.map(({ href }) => document.getElementById(href.split("#")[1])).filter((section): section is HTMLElement => Boolean(section));
-    const onScroll = () => {
-      const current = sections.filter((section) => section.getBoundingClientRect().top <= 150).at(-1);
+    const sections = navItems
+      .map(({ href }) => document.getElementById(href.split("#")[1]))
+      .filter((section): section is HTMLElement => Boolean(section));
+    let frame: number | undefined;
+    const updateActive = () => {
+      frame = undefined;
+      const current = sections.findLast(
+        (section) => section.getBoundingClientRect().top <= 150,
+      );
       setActive(current ? `/#${current.id}` : "");
     };
+    const onScroll = () => {
+      frame ??= window.requestAnimationFrame(updateActive);
+    };
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    if (sections.length) {
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame !== undefined) window.cancelAnimationFrame(frame);
+    };
   }, [pathname]);
 
   return (
@@ -141,14 +155,14 @@ export function SiteHeader() {
               </li>
             ))}
           </ul>
-          <a
-            href={`mailto:${profile.email}`}
+          <Link
+            href="/#contact"
             className="portfolio-button portfolio-button-primary mt-5 w-full justify-between"
             onClick={() => setOpen(false)}
           >
             Let&apos;s talk
             <Arrow className="h-4 w-4 -rotate-45" />
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

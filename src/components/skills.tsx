@@ -19,7 +19,7 @@ export function Skills() {
         {skillGroups.map((group, i) => (
           <div
             key={group.name}
-            className="grid grid-cols-[7.5rem_1fr] gap-4 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:py-6"
+            className="grid grid-cols-1 gap-4 border-t border-line py-5 min-[400px]:grid-cols-[7.5rem_minmax(0,1fr)] sm:grid-cols-[11rem_minmax(0,1fr)] sm:py-6"
             data-reveal
             style={{ "--reveal-delay": `${(i % 2) * 60}ms` } as CSSProperties}
           >

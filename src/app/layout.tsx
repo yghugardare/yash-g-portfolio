@@ -3,6 +3,7 @@ import { Fraunces, Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { RevealObserver } from "@/components/reveal";
+import { HashNavigation } from "@/components/hash-navigation";
 import { site } from "@/data/site";
 import { profile } from "@/data/profile";
 import "./globals.css";
@@ -112,6 +113,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <SiteFooter />
         <RevealObserver />
+        <HashNavigation />
       </body>
     </html>
   );
