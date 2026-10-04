@@ -26,8 +26,9 @@
 
 @media (max-width: 40rem) {
   .frame { height: 100%; aspect-ratio: auto; }
-  .photo { left: 50%; width: auto; height: 200%; transform: translateX(-25%); }
-  .reject { transform: translateX(-12.5%); }
+  .photo { width: 200%; height: 200%; object-fit: cover; object-position: 25% top; }
+  .reject { object-position: left top; }
+  .approve { object-position: 25% bottom; }
 }
 
 @media (max-width: 25rem) {

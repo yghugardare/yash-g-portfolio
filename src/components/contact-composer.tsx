@@ -34,6 +34,19 @@ function subscribeToClock(onChange: () => void) {
   return () => clearInterval(id);
 }
 
+// The device stays the same for the lifetime of the page.
+function subscribeToDevice() {
+  return () => {};
+}
+
+function isMobileDevice() {
+  return (
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    // iPadOS can report a desktop Mac user agent.
+    (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1)
+  );
+}
+
 // Renders "[placeholder]" segments with the site's highlight so senders see what to fill in.
 function Draft({ text }: { text: string }) {
   return (
@@ -54,12 +67,20 @@ function Draft({ text }: { text: string }) {
 export function ContactComposer({ email }: { email: string }) {
   const [topic, setTopic] = useState(0);
   const [copied, setCopied] = useState(false);
+  const useNativeMail = useSyncExternalStore(
+    subscribeToDevice,
+    isMobileDevice,
+    () => true,
+  );
   const time = useSyncExternalStore(
     subscribeToClock,
     () => clock.format(new Date()),
     () => "",
   );
   const current = TOPICS[topic];
+  // Native mail apps accept subject/body, not Gmail's web-only su parameter.
+  // Encode spaces as %20 and body line breaks as CRLF for mailto clients.
+  const mailto = `mailto:${email}?subject=${encodeURIComponent(current.subject)}&body=${encodeURIComponent(current.body.replace(/\r?\n/g, "\r\n"))}`;
   const gmail = `https://mail.google.com/mail/?${new URLSearchParams({
     view: "cm",
     fs: "1",
@@ -145,15 +166,17 @@ export function ContactComposer({ email }: { email: string }) {
 
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
           <p className="text-xs text-ink-3">
-            Opens a Gmail draft in a new tab. Edit it before sending.
+            {useNativeMail
+              ? "Opens a draft in your mail app. Edit it before sending."
+              : "Opens a Gmail draft in a new tab. Edit it before sending."}
           </p>
           <a
-            href={gmail}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={useNativeMail ? mailto : gmail}
+            target={useNativeMail ? undefined : "_blank"}
+            rel={useNativeMail ? undefined : "noopener noreferrer"}
             className="portfolio-button portfolio-button-primary group"
           >
-            Open in Gmail
+            {useNativeMail ? "Open mail app" : "Open in Gmail"}
             <Arrow className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
           </a>
         </div>
