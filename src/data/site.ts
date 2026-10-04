@@ -3,7 +3,7 @@ export const site = {
   title: "Yash Ghugardare — Full Stack Developer",
   description:
     "Full-stack engineer with 2+ years shipping production web, mobile, and AI-powered products. Next.js, React, TypeScript, Node.js — from technical design through production delivery.",
-  url: "https://yash-g-portfolio.vercel.app",
+  url: "https://yashghugardare.vercel.app",
   locale: "en_IN",
   twitterHandle: "@yghugardare15",
 } as const;
